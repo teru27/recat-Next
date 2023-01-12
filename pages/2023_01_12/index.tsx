@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   const test = (str: string, Anser: string): boolean | string => {
     let board: number[][] = new Array();
@@ -76,5 +78,12 @@ export default function Home() {
   /*40*/ test("0,1-8,8/0,5-9,8/2,3-2,4", "38");
   /*41*/ test("0,0-8,6/4,3-9,9/7,1-9,9", "29");
   /*42*/ test("0,0-8,8/2,4-9,8/0,1-9,2", "53");
-  return <div></div>;
+  return (
+    <div>
+      問題URL:
+      <Link href={"http://nabetani.sakura.ne.jp/hena/ordf02in2rec/"}>
+        http://nabetani.sakura.ne.jp/hena/ordf02in2rec/
+      </Link>
+    </div>
+  );
 }
