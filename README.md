@@ -1,3 +1,3 @@
 # recat-Next
 
-最新の react
+最新の react 環境
