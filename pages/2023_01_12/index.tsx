@@ -34,7 +34,6 @@ export default function Home() {
     console.log(`${count}` === Anser ? true : count + "=" + Anser);
     return `${count}` === Anser ? true : count + "=" + Anser;
   };
-
   /*0*/ test("5,1-7,9/3,2-8,6/0,5-9,5", "15");
   /*1*/ test("0,0-9,9/0,0-9,9/0,0-9,9", "0");
   /*2*/ test("0,0-9,9/0,0-0,9/1,0-9,9", "100");
