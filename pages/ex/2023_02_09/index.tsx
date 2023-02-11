@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { makeStr2Array } from "../../../utli/generalSrc";
+import { dimensional2Array, rotationMatrix } from "../../../utli/generalSrc";
 
 export default function blockRotate() {
   const coordinate: readonly string[][] = [
@@ -17,7 +17,9 @@ export default function blockRotate() {
     let numberArr = arr[1].split("/");
     let flag = true;
 
-    let board: string[][] = makeStr2Array(5);
+    let board: string[][] = dimensional2Array(5) as string[][];
+    console.log(dimensional2Array(5, true, 2));
+    console.log(dimensional2Array(5, false, 2));
 
     for (var i = 0; i < 5; i++) {
       const number = numberArr[i];
@@ -25,14 +27,15 @@ export default function blockRotate() {
         for (var j = 0; j < 5; j++) {
           if (number[j] === "1") {
             const XorY = coordinate[i][j].split(",");
-            const x = Number(XorY[0]);
-            const y = Number(XorY[1]);
 
-            let X = x * 0 + y * 1;
-            let Y = x * -1 + y * 0;
-            if (AorB === "b") {
-              Y = Y + 1;
-            }
+            let { X, Y } = rotationMatrix(
+              Number(XorY[0]),
+              Number(XorY[1]),
+              270
+            );
+
+            Y = AorB === "b" ? Y + 1 : Y;
+
             const XandY = X + "," + Y;
 
             let indexNumberX = coordinate.findIndex((coord) =>

@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { makeNum2Array } from "../../../utli/generalSrc";
+import { dimensional2Array } from "../../../utli/generalSrc";
 
 export default function Home() {
   const test = (str: string, Anser: string): boolean | string => {
-    let board: number[][] = makeNum2Array(10);
+    let board: number[][] = dimensional2Array(10, true) as number[][];
     let count: number = 0;
     let strArr = str.split("/");
     let strArr2: any[] = [];

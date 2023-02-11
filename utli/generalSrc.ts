@@ -1,31 +1,53 @@
 /**
- * 文字列の正方形の二次元配列
+ * 二次元配列
  * @param index 配列の数
+ * @param index2 配列内の配列の数
+ * @param arrNum
  * @returns
  */
-export function makeStr2Array(index: number): string[][] {
-  let board: string[][] = new Array();
+export function dimensional2Array(
+  index: number,
+  arrNum?: boolean,
+  index2?: number
+): string[][] | number[][] {
+  let board: string[][] | number[][] = new Array();
+  const indexRow = index2 !== undefined ? index2 : index;
   for (var i = 0; i < index; i++) {
     board[i] = new Array();
-    for (var j = 0; j < index; j++) {
-      board[i][j] = "0";
+    for (var j = 0; j < indexRow; j++) {
+      board[i][j] = arrNum ? 0 : "0";
     }
   }
   return board;
 }
 
 /**
- * 数値の正方形の二次元配列
- * @param index  配列の数
- * @returns
+ * 回転行列
+ * @param x x座標
+ * @param y y座標
+ * @param angle 角度
+ * @returns 回転後のxy座標
  */
-export function makeNum2Array(index: number): number[][] {
-  let board: number[][] = new Array();
-  for (var i = 0; i < index; i++) {
-    board[i] = new Array();
-    for (var j = 0; j < index; j++) {
-      board[i][j] = 0;
-    }
-  }
-  return board;
+export function rotationMatrix(
+  x: number,
+  y: number,
+  angle: number
+): { X: number; Y: number } {
+  const radian = radian2Angle(angle); // 角度をラジアンに変換
+  const sin = Math.round(Math.sin(radian));
+  const cos = Math.round(Math.cos(radian));
+
+  return {
+    X: x * cos + y * -sin,
+    Y: x * sin + y * cos,
+  };
+}
+
+/**
+ * 角度をラジアンに変換
+ * @param angle 角度
+ * @returns ラジアン
+ */
+export function radian2Angle(angle: number) {
+  return angle * (Math.PI / 180);
 }
