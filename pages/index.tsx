@@ -1,26 +1,19 @@
 import Link from "next/link";
-/* import * as fs from "fs";
-
-export function getDirectoryList(dirPath: string): string[] {
-  let dirList: string[] = new Array();
-
-  dirList = fs
-    .readdirSync(dirPath, {
-      withFileTypes: true,
-    })
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => dirent.name);
-
-  return dirList;
-} */
 
 export default function Home() {
-  const linknames: string[] = ["2023_01_12"];
+  const links = [
+    { naem: "2023_01_12", link: "/ex/2023_01_12" },
+    { naem: "2023_02_09", link: "/ex/2023_02_09" },
+    { naem: "aes-256-cbc", link: "/cipher" },
+  ];
+
   return (
     <div>
-      {linknames.map((linkname, index) => (
+      {links.map((link, index) => (
         <div key={`${index}`}>
-          <Link href={`${linkname}`}>{linkname}</Link>
+          <Link href={`${link.link}`} legacyBehavior>
+            <a>{link.naem}</a>
+          </Link>
         </div>
       ))}
     </div>
