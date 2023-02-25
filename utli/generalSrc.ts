@@ -93,3 +93,48 @@ export function rotate2Array(
 
   return rotate2Array;
 }
+/**
+ * 引数と同じ長さの配列の中心座標の配列作成
+ * @param array 中心座標を作りたい配列
+ * @param x xの中心座標
+ * @param y yの中心座標
+ * @returns 中心座標の配列
+ */
+export function centerArrayCalc(
+  array: string[][] | number[][],
+  x: number,
+  y: number
+): string[][] {
+  const xLength = array.length;
+  const yLength = array[0].length;
+  let board: string[][] = dimensional2Array(
+    xLength,
+    false,
+    yLength
+  ) as string[][];
+
+  for (var i = 0; i < xLength; i++) {
+    for (var j = 0; j < yLength; j++) {
+      const xCalc = y >= j ? j - y : Math.abs(j - y);
+      const yCalc = i >= x ? -1 * (i - x) : Math.abs(i - x);
+      board[i][j] = `${xCalc},${yCalc}`;
+    }
+  }
+
+  return board;
+}
+
+/**
+ * 配列の比較
+ * @param array1 比較したい配列1
+ * @param array2 比較したい配列2
+ * @returns 比較結果
+ */
+export function isArrayEqual(
+  array1: string[][] | number[][],
+  array2: string[][] | number[][]
+): boolean {
+  if (array1 && array2 && array1.toString() === array1.toString()) return true;
+
+  return false;
+}
