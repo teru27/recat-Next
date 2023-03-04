@@ -52,7 +52,14 @@ export function rotationMatrix(
 export function radian2Angle(angle: number) {
   return angle * (Math.PI / 180);
 }
-
+/**
+ * 角度をラジアンに変換
+ * @param angle 角度
+ * @returns ラジアン
+ */
+export function Angle2radian(radian: number) {
+  return radian * (180 / Math.PI);
+}
 /**
  * 正方形の二次元配列の回転
  * @param array 配列
@@ -137,4 +144,33 @@ export function isArrayEqual(
   if (array1 && array2 && array1.toString() === array1.toString()) return true;
 
   return false;
+}
+
+/**
+ * 2点のxy座標から一次関数と角度と距離を求める
+ * @param x1 x座標
+ * @param y1 y座標
+ * @param x2 x座標
+ * @param y2 y座標
+ * @returns @param distance 2点のxy座標の距離
+ * @returns @param angle 一次関数の角度
+ */
+export function linearFunction(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number
+): { distance: number; angle: number; a: number; b: number } | null {
+  // xy座標が同じ場合
+  if (x1 === x2 && y1 === y2) {
+    return null;
+  }
+  return {
+    distance: Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2),
+    angle: Angle2radian(Math.atan2(y2 - y1, x2 - x1)),
+    a: isFinite((y2 - y1) / (x2 - x1)) ? (y2 - y1) / (x2 - x1) : 0,
+    b: isFinite((x2 * y1 - x1 * y2) / (x2 - x1))
+      ? (x2 * y1 - x1 * y2) / (x2 - x1)
+      : 0,
+  };
 }
