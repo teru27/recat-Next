@@ -21,6 +21,28 @@ export function dimensional2Array(
   }
   return board;
 }
+/**
+ * 二次元配列内の値を足して
+ * @param index 正方形の配列のインデック数
+ * @param stratNum 一番最初の配列の値
+ * @param sumNumber 増やす値（デフォルト1）
+ * @returns
+ */
+export function sum2Array(
+  index: number,
+  stratNum: number,
+  sumNumber?: number
+): number[][] {
+  const numberArr = dimensional2Array(index, true) as number[][];
+  let count = 0;
+  for (var i = 0; i < numberArr.length; i++) {
+    for (var j = 0; j < numberArr[i].length; j++) {
+      numberArr[i][j] = stratNum + count;
+      count = sumNumber ? count + sumNumber : count + 1;
+    }
+  }
+  return numberArr;
+}
 
 /**
  * 回転行列
@@ -53,9 +75,9 @@ export function radian2Angle(angle: number) {
   return angle * (Math.PI / 180);
 }
 /**
- * 角度をラジアンに変換
- * @param angle 角度
- * @returns ラジアン
+ * ラジアンを角度に変換
+ * @param radian ラジアン
+ * @returns 角度
  */
 export function Angle2radian(radian: number) {
   return radian * (180 / Math.PI);
@@ -127,7 +149,6 @@ export function centerArrayCalc(
       board[i][j] = `${xCalc},${yCalc}`;
     }
   }
-
   return board;
 }
 
@@ -172,5 +193,25 @@ export function linearFunction(
     b: isFinite((x2 * y1 - x1 * y2) / (x2 - x1))
       ? (x2 * y1 - x1 * y2) / (x2 - x1)
       : 0,
+  };
+}
+/**
+ * 2つの一次関数から交点を求める
+ * @param a1
+ * @param b1
+ * @param a2
+ * @param b2
+ * @returns
+ */
+export function intersectionCoordinate(
+  a1: number,
+  b1: number,
+  a2: number,
+  b2: number
+) {
+  const x = isFinite((b2 - b1) / (a1 - a2)) ? (b2 - b1) / (a1 - a2) : null;
+  return {
+    x: x,
+    y: x === null ? null : a1 * x + b1,
   };
 }

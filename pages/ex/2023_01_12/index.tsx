@@ -79,7 +79,9 @@ export default function Home() {
   return (
     <div>
       問題URL:
-      <Link href={exampleUrl}>{exampleUrl}</Link>
+      <a href={exampleUrl} target={"_blank"}>
+        {exampleUrl}
+      </a>
     </div>
   );
 }
