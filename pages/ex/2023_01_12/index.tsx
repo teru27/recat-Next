@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { dimensional2Array } from "../../../utli/generalSrc";
+import {
+  dictionaryArraySortNum,
+  dimensional2Array,
+} from "../../../utli/generalSrc";
 
 export default function Home() {
   const test = (str: string, Anser: string): boolean | string => {

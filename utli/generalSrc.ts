@@ -215,3 +215,25 @@ export function intersectionCoordinate(
     y: x === null ? null : a1 * x + b1,
   };
 }
+/**
+ * 連想配列内のソート（numberのみ対応）
+ * @param dictionaryArr 連想配列
+ * @param key 連想配列のkey
+ * @param Descending 降順（デフォルト昇順）
+ * @returns
+ */
+export function dictionaryArraySortNum(
+  dictionaryArr: {}[],
+  key: any,
+  Descending?: boolean
+): {}[] {
+  if (Descending) {
+    return dictionaryArr.sort(
+      (a: any, b: any) => (b[key] as number) - (a[key] as number)
+    );
+  }
+
+  return dictionaryArr.sort(
+    (a: any, b: any) => (a[key] as number) - (b[key] as number)
+  );
+}
