@@ -13,12 +13,15 @@ type item = {
 
 export default function Home() {
   const REACT_APP_GOOGLE_SHEETS_API_KEY =
-    process.env.REACT_APP_GOOGLE_SHEETS_API_KEY || "";
+    process.env.REACT_APP_GOOGLE_SHEETS_API_KEY ||
+    "AIzaSyAY5ELh7nvibnjKlN9EuEjA_cEpDp3pZcU";
   const REACT_APP_GOOGLE_SHEETS_DOC_ID =
-    process.env.REACT_APP_GOOGLE_SHEETS_DOC_ID || "";
+    process.env.REACT_APP_GOOGLE_SHEETS_DOC_ID ||
+    "1pPaTwWntCrt4dzijy6dcuxA6jzLT2jqwYyEXXu6d56g";
 
   const REACT_APP_GOOGLE_SHEETS_POST_KEY =
-    process.env.REACT_APP_GOOGLE_SHEETS_POST_KEY || "";
+    process.env.REACT_APP_GOOGLE_SHEETS_POST_KEY ||
+    "AKfycbyAkfLMcjLWroKxoqBPpEBIJkuY7H29zrBOR1UfgK_IbWJHwCAE2MLDI2hoosVIJuBFIw";
 
   const [allProduct, setAllProduct] = useState<item[]>([]);
 
