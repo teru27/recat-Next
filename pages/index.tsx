@@ -6,6 +6,7 @@ export default function Home() {
     { naem: "2023_02_09", link: "/ex/2023_02_09" },
     { naem: "2023_03_09", link: "/ex/2023_03_09" },
     { naem: "aes-256-cbc", link: "/cipher" },
+    { naem: "url", link: "/url" },
   ];
 
   return (

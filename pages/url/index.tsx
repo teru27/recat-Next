@@ -12,16 +12,13 @@ type item = {
 };
 
 export default function Home() {
-  const REACT_APP_GOOGLE_SHEETS_API_KEY =
-    process.env.REACT_APP_GOOGLE_SHEETS_API_KEY ||
-    "AIzaSyAY5ELh7nvibnjKlN9EuEjA_cEpDp3pZcU";
-  const REACT_APP_GOOGLE_SHEETS_DOC_ID =
-    process.env.REACT_APP_GOOGLE_SHEETS_DOC_ID ||
-    "1pPaTwWntCrt4dzijy6dcuxA6jzLT2jqwYyEXXu6d56g";
+  const NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY =
+    process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
+  const NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID =
+    process.env.NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID;
 
-  const REACT_APP_GOOGLE_SHEETS_POST_KEY =
-    process.env.REACT_APP_GOOGLE_SHEETS_POST_KEY ||
-    "AKfycbyAkfLMcjLWroKxoqBPpEBIJkuY7H29zrBOR1UfgK_IbWJHwCAE2MLDI2hoosVIJuBFIw";
+  const NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY =
+    process.env.NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY;
 
   const [allProduct, setAllProduct] = useState<item[]>([]);
 
@@ -46,7 +43,7 @@ export default function Home() {
     // tureのときのみ動かす
     if (loding) {
       fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${REACT_APP_GOOGLE_SHEETS_DOC_ID}/values/sheet1?key=${REACT_APP_GOOGLE_SHEETS_API_KEY}`
+        `https://sheets.googleapis.com/v4/spreadsheets/${NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID}/values/sheet1?key=${NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY}`
       )
         .then((res) => res.json())
         .then((datas) => setAllProduct(CsvDic(datas.values)));
@@ -87,7 +84,7 @@ export default function Home() {
       };
 
       fetch(
-        `https://script.google.com/macros/s/${REACT_APP_GOOGLE_SHEETS_POST_KEY}/exec`,
+        `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
         postparam
       )
         .then((response) => {

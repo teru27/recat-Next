@@ -1,5 +1,9 @@
 import Link from "next/link";
-import { intersectionCoordinate, sum2Array } from "../../../utli/generalSrc";
+import {
+  bogoSort,
+  intersectionCoordinate,
+  sum2Array,
+} from "../../../utli/generalSrc";
 
 // 移動後のインデックス
 const index = {
@@ -32,6 +36,8 @@ type keys =
   | "l";
 const alphabet: string[] = ["d", "e", "f", "j", "k", "l"];
 export default function blockRotate() {
+  bogoSort([1, 2], [1, 2]);
+
   const test = (str: string, Anser?: string): boolean | string => {
     let loteAnser: string = "";
 

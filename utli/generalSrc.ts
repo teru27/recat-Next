@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 /**
  * 二次元配列
  * @param index 配列の数
@@ -162,9 +164,7 @@ export function isArrayEqual(
   array1: string[][] | number[][],
   array2: string[][] | number[][]
 ): boolean {
-  if (array1 && array2 && array1.toString() === array1.toString()) return true;
-
-  return false;
+  return array1 && array2 && array1.toString() === array1.toString();
 }
 
 /**
@@ -236,4 +236,28 @@ export function dictionaryArraySortNum(
   return dictionaryArr.sort(
     (a: any, b: any) => (a[key] as number) - (b[key] as number)
   );
+}
+
+export function bogoSort(arr: number[], anserArr: number[]) {
+  let completion = false;
+  let count = 0;
+
+  while (!completion) {
+    let index = arr.length;
+
+    while (index) {
+      var i = Math.floor(Math.random() * index);
+      var str = arr[--index];
+      arr[index] = arr[i];
+      arr[i] = str;
+    }
+    console.log(arr);
+    if (JSON.stringify(arr) == JSON.stringify(anserArr)) {
+      completion = true;
+    } else {
+      count++;
+    }
+  }
+  console.log(count);
+  return;
 }
