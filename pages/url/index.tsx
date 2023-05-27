@@ -14,6 +14,7 @@ type item = {
 export default function Home() {
   const NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY =
     process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
+
   const NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID =
     process.env.NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID;
 
@@ -54,6 +55,37 @@ export default function Home() {
 
   const [setInput, getInput] = useState<string>();
 
+  const get = () => {
+    const sourceList = {
+      sheetNo: 1,
+      method: "GET",
+      type: "getPrivateData",
+      menberId: 1,
+    };
+
+    const postparam = {
+      method: "POST",
+      body: JSON.stringify(sourceList),
+    };
+
+    fetch(
+      `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
+      postparam
+    )
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  get();
+
   // スプレットシートにURLを送る
   const click = () => {
     const re = /[https://sakura-checker.jp/]+/;
@@ -65,7 +97,8 @@ export default function Home() {
 
       const sellNumber = allProduct.length + 2;
       const sourceList = {
-        sheetNo: 2,
+        sheetNo: 1,
+        method: "POST",
         data: [
           {
             menberId: "1",
@@ -132,7 +165,7 @@ export default function Home() {
         <div className={styles.box}>
           <h2>商品一覧</h2>
           {allProduct.map((item: item, index: number) => (
-            <div className={styles.itemBox}>
+            <div className={styles.itemBox} key={`${index}`}>
               <div className={styles.itemName}>商品名：{item.productName}</div>
               <div>値段：{item.price}</div>
               <div></div>
