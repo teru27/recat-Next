@@ -50,9 +50,9 @@ export default function Home() {
     );
   };
 
-  // スプレットシートから全情報を取得
   useEffect(() => {
     // tureのときのみ動かす
+    // スプレットシートから全情報を取得
     if (loding) {
       fetch(
         `https://sheets.googleapis.com/v4/spreadsheets/${NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID}/values/sheet1?key=${NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY}`
@@ -214,6 +214,8 @@ export default function Home() {
 
     if (setInput && setInput.indexOf(amazonUrl) !== -1) {
       const itemUrl = setInput.split("/");
+      // /httpp.*\/\/([^.-]+-)/
+      // /httpp.*\/\/([^]+)/
       addData(`https://sakura-checker.jp/search/${itemUrl[5]}`);
       return;
     }
