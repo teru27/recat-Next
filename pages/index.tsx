@@ -1,4 +1,5 @@
 import Link from "next/link";
+import styles from "../pages/index.module.scss";
 
 export default function Home() {
   const links = [
@@ -12,7 +13,7 @@ export default function Home() {
   return (
     <div>
       {links.map((link, index) => (
-        <div key={`${index}`}>
+        <div key={`${index}`} className={styles.link}>
           <Link href={`${link.link}`} legacyBehavior>
             <a>{link.naem}</a>
           </Link>
