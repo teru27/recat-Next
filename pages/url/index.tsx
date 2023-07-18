@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import useSWR from "swr";
 
 import styles from "../url/url.module.scss";
+import { swrDataLength, getDataRequest, swrGetData } from "../../utli/GASAPI";
 
 type item = {
   URL: string;
@@ -31,10 +33,13 @@ export default function Home() {
   const [loding, setLoding] = useState<boolean>(true);
 
   // テキストボックで打ち込めれた値
-  const [setInput, getInput] = useState<string>();
+  const [getInput, setInput] = useState<string>("");
 
   // 削除ボタンの処理中のフラグ
   const [flag, setFlag] = useState<boolean>(true);
+
+  // 削除ボタンの処理中のフラグ
+  const [getLength, setLength] = useState<number>(0);
 
   // 連想配列に変換
   const CsvDic = (props: any) => {
@@ -53,52 +58,16 @@ export default function Home() {
   useEffect(() => {
     // tureのときのみ動かす
     // スプレットシートから全情報を取得
-    if (loding) {
-      fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID}/values/sheet1?key=${NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY}`
-      )
-        .then((res) => res.json())
-        .then((datas) => {
-          setAllProduct(CsvDic(datas.values));
-        });
-
-      getData();
-    }
-
-    setLoding(false);
-    setFlag(true);
-  }, [loding]);
-
-  // menberIdで絞り込んだデータ取得
-  const getData = () => {
-    const sourceList = {
-      sheetNo: 1,
-      method: "GET",
-      type: "getPrivateData",
-      menberId: 1,
-    };
-
-    const postparam = {
-      method: "POST",
-      body: JSON.stringify(sourceList),
-    };
-
-    fetch(
-      `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
-      postparam
-    )
-      .then((response) => {
-        console.log(response);
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        setUserAllProduct(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    // if (loding) {
+    //   fetch(
+    //     `https://sheets.googleapis.com/v4/spreadsheets/${NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID}/values/sheet1?key=${NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY}`
+    //   )
+    //     .then((res) => res.json())
+    //     .then((datas) => {
+    //       setAllProduct(CsvDic(datas.values));
+    //     });
+    // }
+  }, []);
 
   // データの削除
   const Delete = (menberId: string, itemId: string) => {
@@ -134,6 +103,7 @@ export default function Home() {
 
   // データのアップデート
   const Update = (menberId: string, itemId: string) => {
+    setFlag(false);
     const sourceList = {
       sheetNo: 1,
       method: "GET",
@@ -158,7 +128,6 @@ export default function Home() {
       })
       .then((data) => {
         setLoding(true);
-        setFlag(true);
       })
       .catch((err) => {
         console.log(err);
@@ -167,20 +136,23 @@ export default function Home() {
 
   // データの追加
   const addData = (url: string) => {
+    setFlag(false);
+    // GASのAPIの呼び出し上限の関係上SWRの再更新頻度が低いため、登録時に再度取得
+    dataLengthMutate();
+
     // GAS側で data プロパティにアクセスしているため、
     // クライアントから送るデータにも data プロパティが必要。
-    const sellNumber = AllProduct.length + 2;
     const sourceList = {
       sheetNo: 1,
       method: "POST",
       data: [
         {
           menberId: "1",
-          itemId: `${sellNumber}`,
+          itemId: `${getLength}`,
           parts: "",
           URL: `${url}`,
-          productName: `=if(D${sellNumber}="","",SUBSTITUTE(SUBSTITUTE(IMPORTXML(D${sellNumber},"//title"),"【サクラチェッカー】",""),"のやらせ評価/口コミをチェック","")) `,
-          price: `=if(D${sellNumber}="","",IMPORTXML(D${sellNumber},"//*[@id='itemprice']")) `,
+          productName: `=if(D${getLength}="","",SUBSTITUTE(SUBSTITUTE(IMPORTXML(D${getLength},"//title"),"【サクラチェッカー】",""),"のやらせ評価/口コミをチェック","")) `,
+          price: `=if(D${getLength}="","",IMPORTXML(D${getLength},"//*[@id='itemprice']")) `,
         },
       ],
     };
@@ -212,16 +184,16 @@ export default function Home() {
     const sakuraUrl = "https://sakura-checker.jp/";
     const amazonUrl = "https://www.amazon.co.jp/";
 
-    if (setInput && setInput.indexOf(amazonUrl) !== -1) {
-      const itemUrl = setInput.split("/");
+    if (getInput && getInput.indexOf(amazonUrl) !== -1) {
+      const itemUrl = getInput.split("/");
       // /httpp.*\/\/([^.-]+-)/
       // /httpp.*\/\/([^]+)/
       addData(`https://sakura-checker.jp/search/${itemUrl[5]}`);
       return;
     }
 
-    if (setInput && setInput.indexOf(sakuraUrl) !== -1) {
-      addData(setInput);
+    if (getInput && getInput.indexOf(sakuraUrl) !== -1) {
+      addData(getInput);
       return;
     }
   };
@@ -237,18 +209,45 @@ export default function Home() {
     });
   }, [sumPrice]);
 
-  //
-  useEffect(() => {
-    const menberId = sessionStorage.getItem("meberId");
-    console.log(menberId);
-    if (!menberId) {
-      sessionStorage.setItem("menberId", "1");
-    }
-  }, []);
+  // データのインデックス取得
+  const {
+    data: getData,
+    error: GetDataerror,
+    mutate: GetDataMutate,
+  } = useSWR(["GetData", 1], swrGetData);
 
-  //
   useEffect(() => {
-    // Update("2", "5");
+    if (getData) {
+      setUserAllProduct(getData);
+    }
+
+    if (!flag || loding) {
+      GetDataMutate();
+      setLoding(false);
+      setFlag(true);
+      setInput("");
+    }
+  }, [getData, loding]);
+
+  // データのインデックス取得
+  const {
+    data,
+    error,
+    mutate: dataLengthMutate,
+  } = useSWR("DataLength", swrDataLength);
+
+  useEffect(() => {
+    if (data) {
+      setLength(data);
+    }
+  }, [data]);
+
+  // menberIdの登録仮(今後gasから生成を行い登録するように修正)
+  useEffect(() => {
+    const menberId = localStorage.getItem("meberId");
+    if (!menberId) {
+      localStorage.setItem("meberId", "1");
+    }
   }, []);
 
   return (
@@ -258,10 +257,13 @@ export default function Home() {
         <div className={styles.inputs}>
           <input
             type="text"
-            onChange={(e) => getInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
+            value={getInput}
             className={styles.inputs}
           />
-          <button onClick={() => click()}>送信</button>
+          <button onClick={() => click()} disabled={!flag}>
+            送信
+          </button>
         </div>
       </div>
       <button onClick={() => Update("2", "5")}>Update demo</button>
@@ -276,6 +278,11 @@ export default function Home() {
                   商品名：{item.productName}
                 </div>
                 <div>値段：{item.price}</div>
+                <div>
+                  <a href={item.URL} target="_blank" rel="noopener noreferrer">
+                    リンク
+                  </a>
+                </div>
                 <button
                   onClick={() => Delete(item.menberId, item.itemId)}
                   disabled={!flag}
