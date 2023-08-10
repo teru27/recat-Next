@@ -16,6 +16,15 @@ type item = {
   productName: string;
 };
 
+type getItemId = {
+  itemId: number;
+  rowNumber: number;
+};
+
+type Postparam = {};
+
+const useFetch = (postparam: Postparam) => {};
+
 export const getDataRequest = async (menberId: number): Promise<item[]> => {
   const sourceList = {
     sheetNo: 1,
@@ -66,8 +75,7 @@ export const swrGetData = async (key: [string, number]) => {
     `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
     postparam
   ).then((res) =>
-    Promise.any([res.json()]).then((data) => {
-      console.log(data);
+    Promise.any([res.json()]).then((data: item[]) => {
       returnStr = data;
     })
   );
@@ -75,24 +83,25 @@ export const swrGetData = async (key: [string, number]) => {
   return returnStr;
 };
 
-export const swrDataLength = async () => {
+export const getItemIdRequest = async () => {
   const sourceList = {
     sheetNo: 1,
     method: "GET",
-    type: "DataLength",
+    type: "getItemId",
   };
 
   const postparam = {
     method: "POST",
     body: JSON.stringify(sourceList),
   };
+
   let result = undefined;
   await fetch(
     `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
     postparam
   ).then((res) =>
-    Promise.any([res.json()]).then((data) => {
-      result = data[0].DataLength;
+    Promise.any([res.json()]).then((data: getItemId[]) => {
+      result = data[0];
     })
   );
   return result;

@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 
 import styles from "../url/url.module.scss";
-import { swrDataLength, getDataRequest, swrGetData } from "../../utli/GASAPI";
+import {
+  getDataRequest,
+  swrGetData,
+  getItemIdRequest,
+} from "../../utli/GASAPI";
 
 type item = {
   URL: string;
@@ -11,6 +15,11 @@ type item = {
   parts: string;
   price: string;
   productName: string;
+};
+
+type getItemId = {
+  itemId: number;
+  rowNumber: number;
 };
 
 export default function Home() {
@@ -30,7 +39,7 @@ export default function Home() {
   const [AllProduct, setAllProduct] = useState<item[]>([]);
 
   // 追加後などのあとにデータの取得フラグ
-  const [loding, setLoding] = useState<boolean>(true);
+  const [lodging, setLoding] = useState<boolean>(true);
 
   // テキストボックで打ち込めれた値
   const [getInput, setInput] = useState<string>("");
@@ -39,7 +48,7 @@ export default function Home() {
   const [flag, setFlag] = useState<boolean>(true);
 
   // 削除ボタンの処理中のフラグ
-  const [getLength, setLength] = useState<number>(0);
+  const [getItemId, setItemId] = useState<getItemId>();
 
   // 連想配列に変換
   const CsvDic = (props: any) => {
@@ -135,48 +144,50 @@ export default function Home() {
   };
 
   // データの追加
-  const addData = (url: string) => {
+  const addData = async (url: string) => {
     setFlag(false);
-    // GASのAPIの呼び出し上限の関係上SWRの再更新頻度が低いため、登録時に再度取得
-    dataLengthMutate();
 
-    // GAS側で data プロパティにアクセスしているため、
-    // クライアントから送るデータにも data プロパティが必要。
-    const sourceList = {
-      sheetNo: 1,
-      method: "POST",
-      data: [
-        {
-          menberId: "1",
-          itemId: `${getLength}`,
-          parts: "",
-          URL: `${url}`,
-          productName: `=if(D${getLength}="","",SUBSTITUTE(SUBSTITUTE(IMPORTXML(D${getLength},"//title"),"【サクラチェッカー】",""),"のやらせ評価/口コミをチェック","")) `,
-          price: `=if(D${getLength}="","",IMPORTXML(D${getLength},"//*[@id='itemprice']")) `,
-        },
-      ],
-    };
+    setItemId(await getItemIdRequest());
 
-    const postparam = {
-      method: "POST",
-      body: JSON.stringify(sourceList),
-    };
+    if (getItemId) {
+      // GAS側で data プロパティにアクセスしているため、
+      // クライアントから送るデータにも data プロパティが必要。
+      const sourceList = {
+        sheetNo: 1,
+        method: "POST",
+        data: [
+          {
+            menberId: "1",
+            itemId: `${getItemId.itemId}`,
+            parts: "",
+            URL: `${url}`,
+            productName: `=if(D${getItemId.rowNumber}="","",SUBSTITUTE(SUBSTITUTE(IMPORTXML(D${getItemId.rowNumber},"//title"),"【サクラチェッカー】",""),"のやらせ評価/口コミをチェック","")) `,
+            price: `=if(D${getItemId.rowNumber}="","",IMPORTXML(D${getItemId.rowNumber},"//*[@id='itemprice']")) `,
+          },
+        ],
+      };
 
-    fetch(
-      `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
-      postparam
-    )
-      .then((response) => {
-        console.log(response.status);
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data.result);
-        setLoding(true);
-      })
-      .catch((err) => {
-        console.log("Error!");
-      });
+      const postparam = {
+        method: "POST",
+        body: JSON.stringify(sourceList),
+      };
+
+      fetch(
+        `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
+        postparam
+      )
+        .then((response) => {
+          console.log(response.status);
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data.result);
+          setLoding(true);
+        })
+        .catch((err) => {
+          console.log("Error!");
+        });
+    }
   };
 
   // スプレットシートにURLを送る
@@ -217,30 +228,18 @@ export default function Home() {
   } = useSWR(["GetData", 1], swrGetData);
 
   useEffect(() => {
+    console.log(getData);
     if (getData) {
       setUserAllProduct(getData);
     }
 
-    if (!flag || loding) {
+    if (!flag || lodging) {
       GetDataMutate();
       setLoding(false);
       setFlag(true);
       setInput("");
     }
-  }, [getData, loding]);
-
-  // データのインデックス取得
-  const {
-    data,
-    error,
-    mutate: dataLengthMutate,
-  } = useSWR("DataLength", swrDataLength);
-
-  useEffect(() => {
-    if (data) {
-      setLength(data);
-    }
-  }, [data]);
+  }, [getData, lodging]);
 
   // menberIdの登録仮(今後gasから生成を行い登録するように修正)
   useEffect(() => {
@@ -249,6 +248,8 @@ export default function Home() {
       localStorage.setItem("meberId", "1");
     }
   }, []);
+
+  console.log(userAllProduct);
 
   return (
     <div className={styles.main}>
