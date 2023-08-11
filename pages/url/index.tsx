@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 
 import styles from "../url/url.module.scss";
-import {
-  getDataRequest,
-  swrGetData,
-  getItemIdRequest,
-} from "../../utli/GASAPI";
+import { getDataRequest, swrGetData } from "../../utli/GASAPI";
 
 type item = {
   URL: string;
@@ -15,11 +11,6 @@ type item = {
   parts: string;
   price: string;
   productName: string;
-};
-
-type getItemId = {
-  itemId: number;
-  rowNumber: number;
 };
 
 export default function Home() {
@@ -35,9 +26,6 @@ export default function Home() {
   // menberIdで絞り込んだデータ
   const [userAllProduct, setUserAllProduct] = useState<item[]>([]);
 
-  // スプレットシートから全情報
-  const [AllProduct, setAllProduct] = useState<item[]>([]);
-
   // 追加後などのあとにデータの取得フラグ
   const [lodging, setLoding] = useState<boolean>(true);
 
@@ -46,9 +34,6 @@ export default function Home() {
 
   // 削除ボタンの処理中のフラグ
   const [flag, setFlag] = useState<boolean>(true);
-
-  // 削除ボタンの処理中のフラグ
-  const [getItemId, setItemId] = useState<getItemId>();
 
   // 連想配列に変換
   const CsvDic = (props: any) => {
@@ -147,47 +132,39 @@ export default function Home() {
   const addData = async (url: string) => {
     setFlag(false);
 
-    setItemId(await getItemIdRequest());
+    // GAS側で data プロパティにアクセスしているため、
+    // クライアントから送るデータにも data プロパティが必要。
+    const sourceList = {
+      sheetNo: 1,
+      method: "POST",
+      data: [
+        {
+          menberId: "1",
+          URL: `${url}`,
+        },
+      ],
+    };
 
-    if (getItemId) {
-      // GAS側で data プロパティにアクセスしているため、
-      // クライアントから送るデータにも data プロパティが必要。
-      const sourceList = {
-        sheetNo: 1,
-        method: "POST",
-        data: [
-          {
-            menberId: "1",
-            itemId: `${getItemId.itemId}`,
-            parts: "",
-            URL: `${url}`,
-            productName: `=if(D${getItemId.rowNumber}="","",SUBSTITUTE(SUBSTITUTE(IMPORTXML(D${getItemId.rowNumber},"//title"),"【サクラチェッカー】",""),"のやらせ評価/口コミをチェック","")) `,
-            price: `=if(D${getItemId.rowNumber}="","",IMPORTXML(D${getItemId.rowNumber},"//*[@id='itemprice']")) `,
-          },
-        ],
-      };
+    const postparam = {
+      method: "POST",
+      body: JSON.stringify(sourceList),
+    };
 
-      const postparam = {
-        method: "POST",
-        body: JSON.stringify(sourceList),
-      };
-
-      fetch(
-        `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
-        postparam
-      )
-        .then((response) => {
-          console.log(response.status);
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data.result);
-          setLoding(true);
-        })
-        .catch((err) => {
-          console.log("Error!");
-        });
-    }
+    fetch(
+      `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
+      postparam
+    )
+      .then((response) => {
+        console.log(response.status);
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data.result);
+        setLoding(true);
+      })
+      .catch((err) => {
+        console.log("Error!");
+      });
   };
 
   // スプレットシートにURLを送る
@@ -271,27 +248,23 @@ export default function Home() {
       <section className={styles.container}>
         <div className={styles.box}>
           <h2>商品一覧</h2>
-          {userAllProduct
-            .sort((x, y) => Number(x.itemId) - Number(y.itemId))
-            .map((item: item, index: number) => (
-              <div className={styles.itemBox} key={`${index}`}>
-                <div className={styles.itemName}>
-                  商品名：{item.productName}
-                </div>
-                <div>値段：{item.price}</div>
-                <div>
-                  <a href={item.URL} target="_blank" rel="noopener noreferrer">
-                    リンク
-                  </a>
-                </div>
-                <button
-                  onClick={() => Delete(item.menberId, item.itemId)}
-                  disabled={!flag}
-                >
-                  削除
-                </button>
+          {userAllProduct.map((item: item, index: number) => (
+            <div className={styles.itemBox} key={`${index}`}>
+              <div className={styles.itemName}>商品名：{item.productName}</div>
+              <div>値段：{item.price}</div>
+              <div>
+                <a href={item.URL} target="_blank" rel="noopener noreferrer">
+                  リンク
+                </a>
               </div>
-            ))}
+              <button
+                onClick={() => Delete(item.menberId, item.itemId)}
+                disabled={!flag}
+              >
+                削除
+              </button>
+            </div>
+          ))}
         </div>
         <div className={styles.box}>
           <h2>合計</h2>

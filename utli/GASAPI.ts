@@ -82,27 +82,3 @@ export const swrGetData = async (key: [string, number]) => {
 
   return returnStr;
 };
-
-export const getItemIdRequest = async () => {
-  const sourceList = {
-    sheetNo: 1,
-    method: "GET",
-    type: "getItemId",
-  };
-
-  const postparam = {
-    method: "POST",
-    body: JSON.stringify(sourceList),
-  };
-
-  let result = undefined;
-  await fetch(
-    `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
-    postparam
-  ).then((res) =>
-    Promise.any([res.json()]).then((data: getItemId[]) => {
-      result = data[0];
-    })
-  );
-  return result;
-};
