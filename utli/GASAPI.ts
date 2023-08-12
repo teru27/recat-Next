@@ -7,25 +7,18 @@ const NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID =
 const NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY =
   process.env.NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY;
 
-type item = {
-  URL: string;
-  itemId: string;
+type TODO = {
+  todo: string;
+  todoId: string;
   menberId: string;
-  parts: string;
-  price: string;
-  productName: string;
-};
-
-type getItemId = {
-  itemId: number;
-  rowNumber: number;
+  priority: string;
 };
 
 type Postparam = {};
 
 const useFetch = (postparam: Postparam) => {};
 
-export const getDataRequest = async (menberId: number): Promise<item[]> => {
+export const getDataRequest = async (menberId: number): Promise<TODO[]> => {
   const sourceList = {
     sheetNo: 1,
     method: "GET",
@@ -38,7 +31,7 @@ export const getDataRequest = async (menberId: number): Promise<item[]> => {
     body: JSON.stringify(sourceList),
   };
 
-  let returnStr: item[] = [];
+  let returnStr: TODO[] = [];
 
   await fetch(
     `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
@@ -46,7 +39,7 @@ export const getDataRequest = async (menberId: number): Promise<item[]> => {
   )
     .then((res) => res.json())
     .then(
-      (result: item[]) => {
+      (result: TODO[]) => {
         returnStr = result;
       },
       (error: Error) => {
@@ -69,13 +62,13 @@ export const swrGetData = async (key: [string, number]) => {
     body: JSON.stringify(sourceList),
   };
 
-  let returnStr: item[] = [];
+  let returnStr: TODO[] = [];
 
   await fetch(
     `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
     postparam
   ).then((res) =>
-    Promise.any([res.json()]).then((data: item[]) => {
+    Promise.any([res.json()]).then((data: TODO[]) => {
       returnStr = data;
     })
   );

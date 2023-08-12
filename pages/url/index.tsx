@@ -2,15 +2,13 @@ import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 
 import styles from "../url/url.module.scss";
-import { getDataRequest, swrGetData } from "../../utli/GASAPI";
+import { swrGetData } from "../../utli/GASAPI";
 
-type item = {
-  URL: string;
-  itemId: string;
+type TODO = {
+  todo: string;
+  todoId: string;
   menberId: string;
-  parts: string;
-  price: string;
-  productName: string;
+  priority: string;
 };
 
 export default function Home() {
@@ -24,7 +22,7 @@ export default function Home() {
     process.env.NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY;
 
   // menberIdで絞り込んだデータ
-  const [userAllProduct, setUserAllProduct] = useState<item[]>([]);
+  const [userAllProduct, setUserAllProduct] = useState<TODO[]>([]);
 
   // 追加後などのあとにデータの取得フラグ
   const [lodging, setLoding] = useState<boolean>(true);
@@ -64,14 +62,14 @@ export default function Home() {
   }, []);
 
   // データの削除
-  const Delete = (menberId: string, itemId: string) => {
+  const Delete = (menberId: string, todoId: string) => {
     setFlag(false);
     const sourceList = {
       sheetNo: 1,
       method: "GET",
       type: "deleteData",
       menberId: menberId,
-      itemId: itemId,
+      todoId: todoId,
     };
 
     const postparam = {
@@ -96,15 +94,15 @@ export default function Home() {
   };
 
   // データのアップデート
-  const Update = (menberId: string, itemId: string) => {
+  const Update = (menberId: string, todoId: string) => {
     setFlag(false);
     const sourceList = {
       sheetNo: 1,
       method: "GET",
       type: "UpDate",
       menberId: menberId,
-      itemId: itemId,
-      url: "https://sakura-checker.jp/search/B0BP3SHG5Z/",
+      todoId: todoId,
+      todo: "https://sakura-checker.jp/search/B0BP3SHG5Z/",
     };
 
     const postparam = {
@@ -117,7 +115,7 @@ export default function Home() {
       postparam
     )
       .then((response) => {
-        console.log(response);
+        console.log(response.ok);
         return response.json();
       })
       .then((data) => {
@@ -129,18 +127,18 @@ export default function Home() {
   };
 
   // データの追加
-  const addData = async (url: string) => {
+  const addData = async (todo: string) => {
     setFlag(false);
-
+    console.log("a");
     // GAS側で data プロパティにアクセスしているため、
     // クライアントから送るデータにも data プロパティが必要。
     const sourceList = {
       sheetNo: 1,
       method: "POST",
+      menberId: "1",
       data: [
         {
-          menberId: "1",
-          URL: `${url}`,
+          todo: `${todo}`,
         },
       ],
     };
@@ -167,37 +165,14 @@ export default function Home() {
       });
   };
 
-  // スプレットシートにURLを送る
+  // スプレットシートに送る
   const click = () => {
-    const sakuraUrl = "https://sakura-checker.jp/";
-    const amazonUrl = "https://www.amazon.co.jp/";
-
-    if (getInput && getInput.indexOf(amazonUrl) !== -1) {
-      const itemUrl = getInput.split("/");
-      // /httpp.*\/\/([^.-]+-)/
-      // /httpp.*\/\/([^]+)/
-      addData(`https://sakura-checker.jp/search/${itemUrl[5]}`);
-      return;
-    }
-
-    if (getInput && getInput.indexOf(sakuraUrl) !== -1) {
+    if (getInput) {
       addData(getInput);
-      return;
     }
   };
 
-  // ドラックアンドドロップで移動後に値段
-  const [sumPrice, setSumPrice] = useState<item[]>([]);
-
-  let sum = 0;
-  // 合計側に移動してきたときに合計金額を計算する
-  useEffect(() => {
-    sumPrice.forEach((item: item, index: number) => {
-      sum = sum + Number(item.price);
-    });
-  }, [sumPrice]);
-
-  // データのインデックス取得
+  // データ取得
   const {
     data: getData,
     error: GetDataerror,
@@ -222,7 +197,32 @@ export default function Home() {
   useEffect(() => {
     const menberId = localStorage.getItem("meberId");
     if (!menberId) {
-      localStorage.setItem("meberId", "1");
+      const sourceList = {
+        sheetNo: 1,
+        method: "GET",
+        type: "makeMenberId",
+      };
+
+      const postparam = {
+        method: "POST",
+        body: JSON.stringify(sourceList),
+      };
+
+      fetch(
+        `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
+        postparam
+      )
+        .then((response) => {
+          console.log(response.ok);
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          localStorage.setItem("meberId", data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, []);
 
@@ -247,18 +247,12 @@ export default function Home() {
       <button onClick={() => Update("2", "5")}>Update demo</button>
       <section className={styles.container}>
         <div className={styles.box}>
-          <h2>商品一覧</h2>
-          {userAllProduct.map((item: item, index: number) => (
+          <h2>todo</h2>
+          {userAllProduct.map((item: TODO, index: number) => (
             <div className={styles.itemBox} key={`${index}`}>
-              <div className={styles.itemName}>商品名：{item.productName}</div>
-              <div>値段：{item.price}</div>
-              <div>
-                <a href={item.URL} target="_blank" rel="noopener noreferrer">
-                  リンク
-                </a>
-              </div>
+              <div className={styles.itemName}>{item.todo}</div>
               <button
-                onClick={() => Delete(item.menberId, item.itemId)}
+                onClick={() => Delete(item.menberId, item.todoId)}
                 disabled={!flag}
               >
                 削除
@@ -267,29 +261,19 @@ export default function Home() {
           ))}
         </div>
         <div className={styles.box}>
-          <h2>合計</h2>
-          {sumPrice.map((item: item, index: number) => (
-            <div className={styles.itemBox}>
-              <div className={styles.item}>商品名：{item.productName}</div>
-              <div>値段：{item.price}</div>
-            </div>
-          ))}
-          <div>合計金額：{sum}</div>
+          <h2>???</h2>
         </div>
       </section>
     </div>
   );
 }
 
-function ArrMapRender(itemArray: item[]) {
+function ArrMapRender(itemArray: TODO[]) {
   // <ArrMapRender {...userAllProduct} />
   return (
     <>
-      {itemArray.map((item: item, index: number) => (
-        <div className={styles.itemBox}>
-          <div className={styles.item}>商品名：{item.productName}</div>
-          <div>値段：{item.price}</div>{" "}
-        </div>
+      {itemArray.map((item: TODO, index: number) => (
+        <div className={styles.itemBox}></div>
       ))}
     </>
   );
