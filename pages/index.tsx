@@ -8,6 +8,7 @@ export default function Home() {
     { naem: "2023_03_09", link: "/ex/2023_03_09" },
     { naem: "aes-256-cbc", link: "/cipher" },
     { naem: "url", link: "/url" },
+    { naem: "yomiage", link: "/yomiage" },
   ];
 
   return (

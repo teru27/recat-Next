@@ -1,0 +1,21 @@
+.main {
+  display: flex;
+  margin: 0 auto;
+
+  textarea {
+    resize: vertical;
+    resize: auto;
+    max-width: 500px;
+    max-height: 500px;
+    min-width: 400px;
+    min-height: 300px;
+    width: 400px;
+    height: 300px;
+  }
+  .container {
+    margin: 0 auto;
+    .box {
+      margin: 0 auto;
+    }
+  }
+}
