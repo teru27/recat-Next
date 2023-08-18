@@ -4,12 +4,7 @@
 
 const isProd = process.env.NODE_ENV === "production";
 
-const prefixPath =
-  isProd && process.env.NEXT_PUBLIC_PREFIC_PATH
-    ? process.env.NEXT_PUBLIC_PREFIC_PATH
-    : "";
-
-console.log(prefixPath === "");
+const prefixPath = isProd ? process.env.BASE_PATH || "/recat-Next" : "";
 
 const nextConfig = {
   /* config options here */
