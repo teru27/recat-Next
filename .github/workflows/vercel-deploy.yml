@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  build-deploy:
+  build_and_deploy_vercel:
     # ubuntu OS を仮想マシン上に用意する
     runs-on: ubuntu-22.04
     steps:
@@ -42,12 +42,6 @@ jobs:
       # そのなかに、HTMLファイル群と、それらが読み込むJSファイル群を収めた_nextディレクトリがある
       - name: export
         run: npm run export
-
-      # しかしGitHub Pagesの仕様として_から始まるディレクトリが見えず404となる
-      # つまりHTMLからJSを読み込めない
-      # これを回避するために.nojekyllファイルをoutディレクトリに作る
-      - name: add nojekyll
-        run: touch ./out/.nojekyll
 
       # gh-pagesブランチにoutディレクトリの中身をプッシュする
       # gh-pagesブランチは自動的に作成される
