@@ -4,16 +4,18 @@
 
 const isProd = process.env.NODE_ENV === "production";
 
-const prefixPath = isProd ? "/recat-Next" : "";
-
-console.log(process.env.NEXT_PUBLIC_URL);
+const prefixPath = isProd
+  ? process.env.NEXT_PUBLIC_URL != undefined
+    ? ""
+    : "/recat-Next"
+  : "";
 
 const nextConfig = {
   /* config options here */
   reactStrictMode: true,
   swcMinify: true,
-  assetPrefix: process.env.NEXT_PUBLIC_URL != undefined ? "" : prefixPath,
-  basePath: process.env.NEXT_PUBLIC_URL != undefined ? "" : prefixPath,
+  assetPrefix: prefixPath,
+  basePath: prefixPath,
   trailingSlash: true,
   // compiler: {
   //   removeConsole: isProd,
