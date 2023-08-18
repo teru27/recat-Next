@@ -58,4 +58,3 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
