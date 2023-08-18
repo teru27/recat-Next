@@ -15,9 +15,9 @@ const nextConfig = {
   assetPrefix: prefixPath,
   basePath: prefixPath,
   trailingSlash: true,
-  compiler: {
-    removeConsole: isProd,
-  },
+  // compiler: {
+  //   removeConsole: isProd,
+  // },
 };
 
 module.exports = nextConfig;
