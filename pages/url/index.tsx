@@ -21,6 +21,8 @@ export default function Home() {
   const NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY =
     process.env.NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY;
 
+  console.log(NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY);
+
   // menberIdで絞り込んだデータ
   const [userAllProduct, setUserAllProduct] = useState<TODO[]>([]);
 

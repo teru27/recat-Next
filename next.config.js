@@ -10,9 +10,9 @@ const nextConfig = {
   swcMinify: true,
   assetPrefix: isProd ? "/recat-Next" : "",
   trailingSlash: true,
-  compiler: {
-    removeConsole: isProd,
-  },
+  // compiler: {
+  //   removeConsole: isProd,
+  // },
 };
 
 module.exports = nextConfig;
