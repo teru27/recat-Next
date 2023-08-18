@@ -13,7 +13,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   assetPrefix: process.env.NEXT_PUBLIC_URL != undefined ? "" : prefixPath,
-  basePath: prefixPath,
+  basePath: process.env.NEXT_PUBLIC_URL != undefined ? "" : prefixPath,
   trailingSlash: true,
   // compiler: {
   //   removeConsole: isProd,
