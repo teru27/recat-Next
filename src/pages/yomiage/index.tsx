@@ -53,6 +53,7 @@ export default function Home() {
 
   const click = () => {
     if (text) {
+      set(false);
       playTextToSpeech({
         text,
         lang: "ja-JP",
@@ -79,7 +80,13 @@ export default function Home() {
 
   const reset = () => {
     speechSynthesis.cancel();
+    set(false);
   };
+
+  function textAllDelete() {
+    setText("");
+    reset();
+  }
 
   useEffect(() => {
     reset();
@@ -100,13 +107,27 @@ export default function Home() {
           />
         </div>
         <div className={styles.box}>
-          <button onClick={() => click()}>開始</button>
+          <button onClick={() => click()} className={styles.buttonOutline}>
+            開始
+          </button>
           {get ? (
-            <button onClick={() => resume()}>再生</button>
+            <button onClick={() => resume()} className={styles.buttonOutline}>
+              再生
+            </button>
           ) : (
-            <button onClick={() => pause()}>停止</button>
+            <button onClick={() => pause()} className={styles.buttonOutline}>
+              停止
+            </button>
           )}
-          <button onClick={() => reset()}>リセット</button>
+          <button onClick={() => reset()} className={styles.buttonOutline}>
+            リセット
+          </button>
+          <button
+            onClick={() => textAllDelete()}
+            className={styles.buttonOutline}
+          >
+            text all delete
+          </button>
         </div>
         <div className={styles.box}>
           pitch:{pitch.toFixed(1)}
