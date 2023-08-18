@@ -13,7 +13,6 @@ interface ITextToSpeech {
 
 export default function Home() {
   //  https://qiita.com/osakasho/items/1f24e24c1ad8a9bd0e94
-
   let utterance: SpeechSynthesisUtterance;
 
   /**
