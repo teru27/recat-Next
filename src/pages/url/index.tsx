@@ -12,12 +12,6 @@ type TODO = {
 };
 
 export default function Home() {
-  const NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY =
-    process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
-
-  const NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID =
-    process.env.NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID;
-
   const NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY =
     process.env.NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY;
 
