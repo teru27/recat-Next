@@ -12,7 +12,7 @@ const nextConfig = {
   /* config options here */
   reactStrictMode: true,
   swcMinify: true,
-  assetPrefix: prefixPath,
+  assetPrefix: process.env.NEXT_PUBLIC_URL ? "" : prefixPath,
   basePath: prefixPath,
   trailingSlash: true,
   // compiler: {
