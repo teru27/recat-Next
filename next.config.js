@@ -10,12 +10,12 @@ const nextConfig = {
   /* config options here */
   reactStrictMode: true,
   swcMinify: true,
-  assetPrefix: process.env.VERCEL_PAGE ? "" : prefixPath,
+  assetPrefix: prefixPath,
   basePath: prefixPath,
   trailingSlash: true,
-  // compiler: {
-  //   removeConsole: isProd,
-  // },
+  compiler: {
+    removeConsole: isProd,
+  },
 };
 
 module.exports = nextConfig;

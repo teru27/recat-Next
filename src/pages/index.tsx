@@ -10,7 +10,7 @@ export default function Home() {
     { naem: "url", link: "/url" },
     { naem: "yomiage", link: "/yomiage" },
   ];
-  console.log(process.env.VERCEL_PAGE);
+
   return (
     <div>
       {links.map((link, index) => (
