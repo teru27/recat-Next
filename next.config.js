@@ -4,15 +4,18 @@
 
 const isProd = process.env.NODE_ENV === "production";
 
+const prefixPath = !isProd ? "/recat-Next" : "";
+
 const nextConfig = {
   /* config options here */
   reactStrictMode: true,
   swcMinify: true,
-  assetPrefix: isProd ? "/recat-Next" : "",
+  assetPrefix: "/",
+  basePath: prefixPath,
   trailingSlash: true,
-  // compiler: {
-  //   removeConsole: isProd,
-  // },
+  compiler: {
+    removeConsole: isProd,
+  },
 };
 
 module.exports = nextConfig;
