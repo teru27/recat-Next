@@ -49,6 +49,12 @@ jobs:
       - name: add nojekyll
         run: touch ./out/.nojekyll
 
+      # - name: add vercel-ignore-build-step.sh
+      #   run: touch ./out/vercel-ignore-build-step.sh
+
+      - name: add vercel-ignore-build-step.sh
+        run: ls -l
+
       # gh-pagesブランチにoutディレクトリの中身をプッシュする
       # gh-pagesブランチは自動的に作成される
       - name: deploy
