@@ -49,6 +49,8 @@ jobs:
       - name: add nojekyll
         run: touch ./out/.nojekyll
 
+      # ブランチ：gh-pagesにpushされた場合でもvercel側でデプロイされてしまう
+      # vercel-ignore-build-step.shをgh-pages側にもコピーしデプロイしないようにする
       - name: cp vercel-ignore-build-step.sh
         run: cp vercel-ignore-build-step.sh ./out/
 
