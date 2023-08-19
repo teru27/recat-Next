@@ -44,10 +44,10 @@ jobs:
         run: npm run export
 
       # vercelの無料サーバーへデプロイ
-      # - name: deploy
-      #   uses: amondnet/vercel-action@v20
-      #   with:
-      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
-      #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: vercel-deploy
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
