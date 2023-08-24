@@ -7,16 +7,22 @@ export default function Home() {
     { naem: "2023_02_09", link: "/ex/2023_02_09" },
     { naem: "2023_03_09", link: "/ex/2023_03_09" },
     { naem: "aes-256-cbc", link: "/cipher" },
-    { naem: "url", link: "/url" },
+    { naem: "todo", link: "/todo" },
     { naem: "yomiage", link: "/yomiage" },
+    { naem: "dnd-demo", link: "/dnd-demo" },
   ];
 
   return (
     <div>
+      <h1>page map</h1>
       {links.map((link, index) => (
-        <div key={`${index}`} className={styles.link}>
+        <div key={`${index}`}>
           <Link href={`${link.link}`} legacyBehavior>
-            <a>{link.naem}</a>
+            <ul>
+              <li>
+                <a className={styles.link}>{link.naem}</a>
+              </li>
+            </ul>
           </Link>
         </div>
       ))}

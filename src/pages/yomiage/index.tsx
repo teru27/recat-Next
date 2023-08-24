@@ -20,25 +20,29 @@ export default function Home() {
    * @param props
    */
   const playTextToSpeech = async (props: ITextToSpeech) => {
-    utterance = new SpeechSynthesisUtterance(props.text);
+    try {
+      utterance = new SpeechSynthesisUtterance(props.text);
 
-    if (props.voiceName) {
-      if (
-        speechSynthesis
-          .getVoices()
-          .find((voice) => voice.name === props.voiceName)
-      ) {
-        utterance.voice = speechSynthesis
-          .getVoices()
-          .find(
-            (voice) => voice.name === props.voiceName
-          ) as SpeechSynthesisVoice;
+      if (props.voiceName) {
+        if (
+          speechSynthesis
+            .getVoices()
+            .find((voice) => voice.name === props.voiceName)
+        ) {
+          utterance.voice = speechSynthesis
+            .getVoices()
+            .find(
+              (voice) => voice.name === props.voiceName
+            ) as SpeechSynthesisVoice;
+        }
       }
+      utterance.rate = speed;
+      utterance.pitch = pitch;
+      utterance.volume = props.volume ? props.volume : 1;
+      speechSynthesis.speak(utterance);
+    } catch (e) {
+    } finally {
     }
-    utterance.rate = speed;
-    utterance.pitch = pitch;
-    utterance.volume = props.volume ? props.volume : 1;
-    speechSynthesis.speak(utterance);
   };
 
   // テキストボックで打ち込めれた値
@@ -90,6 +94,8 @@ export default function Home() {
   useEffect(() => {
     reset();
   }, []);
+
+  console.log(text.split(/\r\n|\r|\n/g));
 
   return (
     <div className={styles.main}>

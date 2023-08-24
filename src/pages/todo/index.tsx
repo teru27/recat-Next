@@ -1,22 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import useSWR from "swr";
 
-import styles from "../url/url.module.scss";
-import { swrGetData } from "../../utli/GASAPI";
+import {
+  closestCorners,
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+  DragOverEvent,
+} from "@dnd-kit/core";
+import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
-type TODO = {
-  todo: string;
-  todoId: string;
-  menberId: string;
-  priority: string;
-};
+import styles from "./todo.module.scss";
+import { swrGetData } from "../../utli/GASAPI";
+import { ColumnType, Todo } from "../../types/types";
+import { RenderTodoList } from "../../component/todo/RenderTodoList";
 
 export default function Home() {
   const NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY =
     process.env.NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY;
 
+  const data: ColumnType[] = [
+    {
+      id: "backLog",
+      title: "課題",
+      todos: [],
+      deleteEvent: false,
+    },
+    {
+      id: "inProgress",
+      title: "進行中",
+      todos: [],
+      deleteEvent: false,
+    },
+    {
+      id: "done",
+      title: "完了",
+      todos: [],
+      deleteEvent: true,
+    },
+  ];
+
+  const [columns, setColumns] = useState<ColumnType[]>(data);
+
   // menberIdで絞り込んだデータ
-  const [userAllProduct, setUserAllProduct] = useState<TODO[]>([]);
+  const [todoList, setTodoList] = useState<Todo[]>([]);
 
   // 追加後などのあとにデータの取得フラグ
   const [lodging, setLoding] = useState<boolean>(true);
@@ -63,7 +93,7 @@ export default function Home() {
       method: "GET",
       type: "deleteData",
       menberId: menberId,
-      todoId: todoId,
+      id: todoId,
     };
 
     const postparam = {
@@ -81,6 +111,7 @@ export default function Home() {
       })
       .then((data) => {
         setLoding(true);
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -123,7 +154,6 @@ export default function Home() {
   // データの追加
   const addData = async (todo: string) => {
     setFlag(false);
-    console.log("a");
     // GAS側で data プロパティにアクセスしているため、
     // クライアントから送るデータにも data プロパティが必要。
     const sourceList = {
@@ -133,6 +163,7 @@ export default function Home() {
       data: [
         {
           todo: `${todo}`,
+          status: "backlog",
         },
       ],
     };
@@ -176,7 +207,7 @@ export default function Home() {
   useEffect(() => {
     console.log(getData);
     if (getData) {
-      setUserAllProduct(getData);
+      setTodoList(getData);
     }
 
     if (!flag || lodging) {
@@ -220,11 +251,29 @@ export default function Home() {
     }
   }, []);
 
-  console.log(userAllProduct);
+  useEffect(() => {
+    todoList.forEach((todo: Todo, index: number) => {
+      switch (todo.status) {
+        case "inProgress":
+          data[1].todos.push(todo);
+          break;
+        case "done":
+          data[2].todos.push(todo);
+          break;
+        default:
+          data[0].todos.push(todo);
+          break;
+      }
+    });
+
+    setColumns(data);
+  }, [todoList]);
+
+  console.log(data);
 
   return (
     <div className={styles.main}>
-      <h1>桜チェッカーのURLから値段と商品名を抜き出す</h1>
+      <h1>Todo List</h1>
       <div className={styles.inputBox}>
         <div className={styles.inputs}>
           <input
@@ -239,36 +288,18 @@ export default function Home() {
         </div>
       </div>
       <button onClick={() => Update("2", "5")}>Update demo</button>
+
       <section className={styles.container}>
-        <div className={styles.box}>
-          <h2>todo</h2>
-          {userAllProduct.map((item: TODO, index: number) => (
-            <div className={styles.itemBox} key={`${index}`}>
-              <div className={styles.itemName}>{item.todo}</div>
-              <button
-                onClick={() => Delete(item.menberId, item.todoId)}
-                disabled={!flag}
-              >
-                削除
-              </button>
-            </div>
-          ))}
-        </div>
-        <div className={styles.box}>
-          <h2>???</h2>
-        </div>
+        {columns.map((column) => (
+          <RenderTodoList
+            id={column.id}
+            title={column.title}
+            todos={column.todos}
+            flag={column.deleteEvent ? flag : undefined}
+            Delete={column.deleteEvent ? Delete : undefined}
+          />
+        ))}
       </section>
     </div>
-  );
-}
-
-function ArrMapRender(itemArray: TODO[]) {
-  // <ArrMapRender {...userAllProduct} />
-  return (
-    <>
-      {itemArray.map((item: TODO, index: number) => (
-        <div className={styles.itemBox}></div>
-      ))}
-    </>
   );
 }
