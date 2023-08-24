@@ -15,7 +15,7 @@ import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
 import styles from "./todo.module.scss";
 import { swrGetData } from "../../utli/GASAPI";
-import { ColumnType, Todo } from "../../types/types";
+import { ColumnType, Status, Todo } from "../../types/types";
 import { RenderTodoList } from "../../component/todo/RenderTodoList";
 
 export default function Home() {
@@ -128,6 +128,39 @@ export default function Home() {
       menberId: menberId,
       todoId: todoId,
       todo: "https://sakura-checker.jp/search/B0BP3SHG5Z/",
+    };
+
+    const postparam = {
+      method: "POST",
+      body: JSON.stringify(sourceList),
+    };
+
+    fetch(
+      `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
+      postparam
+    )
+      .then((response) => {
+        console.log(response.ok);
+        return response.json();
+      })
+      .then((data) => {
+        setLoding(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // データのアップデート
+  const UpDateStatus = (menberId: string, id: string, status: Status) => {
+    setFlag(false);
+    const sourceList = {
+      sheetNo: 1,
+      method: "GET",
+      type: "UpDateStatus",
+      menberId,
+      id,
+      status,
     };
 
     const postparam = {
@@ -288,7 +321,9 @@ export default function Home() {
         </div>
       </div>
       <button onClick={() => Update("2", "5")}>Update demo</button>
-
+      <button onClick={() => UpDateStatus("2", "4", "inProgress")}>
+        UpDateStatus demo
+      </button>
       <section className={styles.container}>
         {columns.map((column) => (
           <RenderTodoList
