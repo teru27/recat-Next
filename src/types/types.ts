@@ -13,7 +13,11 @@ export type RenderTodoListType = {
   Delete: (menberId: string, todoId: string) => void;
 };
 
-export type RenderTodoType = {
+export type UpDateStatusType = {
+  UpDateStatus: (menberId: string, id: string, status: Status) => void;
+};
+
+export type RenderTodoType = UpDateStatusType & {
   todo: Todo;
   flag?: boolean;
   Delete?: (menberId: string, todoId: string) => void;

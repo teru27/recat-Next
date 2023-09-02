@@ -4,11 +4,11 @@
   .itemBox {
     display: flex;
     text-align: left;
+    min-width: 100px;
     margin: 20px;
     padding: 10px;
 
     .itemName {
-      word-wrap: break-word;
     }
     button {
       cursor: pointer;

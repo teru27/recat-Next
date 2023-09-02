@@ -151,37 +151,37 @@ export default function Home() {
       });
   };
 
-  // データのアップデート
+  // Statusのアップデート
   const UpDateStatus = (menberId: string, id: string, status: Status) => {
-    setFlag(false);
-    const sourceList = {
-      sheetNo: 1,
-      method: "GET",
-      type: "UpDateStatus",
-      menberId,
-      id,
-      status,
-    };
+    console.log("Click UpDateStatus");
 
-    const postparam = {
-      method: "POST",
-      body: JSON.stringify(sourceList),
-    };
-
-    fetch(
-      `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
-      postparam
-    )
-      .then((response) => {
-        console.log(response.ok);
-        return response.json();
-      })
-      .then((data) => {
-        setLoding(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // setFlag(false);
+    // const sourceList = {
+    //   sheetNo: 1,
+    //   method: "GET",
+    //   type: "UpDateStatus",
+    //   menberId,
+    //   id,
+    //   status,
+    // };
+    // const postparam = {
+    //   method: "POST",
+    //   body: JSON.stringify(sourceList),
+    // };
+    // fetch(
+    //   `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
+    //   postparam
+    // )
+    //   .then((response) => {
+    //     console.log(response.ok);
+    //     return response.json();
+    //   })
+    //   .then((data) => {
+    //     setLoding(true);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   // データの追加
@@ -330,6 +330,7 @@ export default function Home() {
             id={column.id}
             title={column.title}
             todos={column.todos}
+            UpDateStatus={UpDateStatus}
             flag={column.deleteEvent ? flag : undefined}
             Delete={column.deleteEvent ? Delete : undefined}
           />
