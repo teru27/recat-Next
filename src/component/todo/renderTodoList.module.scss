@@ -4,15 +4,30 @@
   .itemBox {
     display: flex;
     text-align: left;
-    min-width: 100px;
+    background-color: gray;
+    width: 200px;
     margin: 20px;
     padding: 10px;
 
-    .itemName {
-    }
     button {
       cursor: pointer;
       margin-left: 5px;
     }
   }
+}
+
+.leftArrowBlock {
+  position: sticky;
+
+  text-align: left;
+}
+
+.rightArrowBlock {
+  position: sticky;
+
+  text-align: right;
+}
+.ArrowNone {
+  display: none;
+  margin: 0 0;
 }

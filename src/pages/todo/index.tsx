@@ -155,33 +155,33 @@ export default function Home() {
   const UpDateStatus = (menberId: string, id: string, status: Status) => {
     console.log("Click UpDateStatus");
 
-    // setFlag(false);
-    // const sourceList = {
-    //   sheetNo: 1,
-    //   method: "GET",
-    //   type: "UpDateStatus",
-    //   menberId,
-    //   id,
-    //   status,
-    // };
-    // const postparam = {
-    //   method: "POST",
-    //   body: JSON.stringify(sourceList),
-    // };
-    // fetch(
-    //   `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
-    //   postparam
-    // )
-    //   .then((response) => {
-    //     console.log(response.ok);
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     setLoding(true);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    setFlag(false);
+    const sourceList = {
+      sheetNo: 1,
+      method: "GET",
+      type: "UpDateStatus",
+      menberId,
+      id,
+      status,
+    };
+    const postparam = {
+      method: "POST",
+      body: JSON.stringify(sourceList),
+    };
+    fetch(
+      `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
+      postparam
+    )
+      .then((response) => {
+        console.log(response.ok);
+        return response.json();
+      })
+      .then((data) => {
+        setLoding(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   // データの追加
@@ -325,16 +325,18 @@ export default function Home() {
         UpDateStatus demo
       </button>
       <section className={styles.container}>
-        {columns.map((column) => (
-          <RenderTodoList
-            id={column.id}
-            title={column.title}
-            todos={column.todos}
-            UpDateStatus={UpDateStatus}
-            flag={column.deleteEvent ? flag : undefined}
-            Delete={column.deleteEvent ? Delete : undefined}
-          />
-        ))}
+        {columns.map((column) => {
+          const props = {
+            id: column.id,
+            title: column.title,
+            todos: column.todos,
+            UpDateStatus: UpDateStatus,
+            flag: column.deleteEvent ? flag : undefined,
+            Delete: column.deleteEvent ? Delete : undefined,
+          };
+
+          return <RenderTodoList {...props} />;
+        })}
       </section>
     </div>
   );

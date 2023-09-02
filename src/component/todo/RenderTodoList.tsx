@@ -5,12 +5,13 @@ import {
   RenderTodoType,
   ColumnType,
   UpDateStatusType,
+  Status,
 } from "../../types/types";
 
 export type RenderTodoListype = ColumnType & UpDateStatusType;
 
 export const RenderTodoList: FC<RenderTodoListype> = (props) => {
-  const { id, title, todos, flag, Delete, UpDateStatus } = props;
+  const { id, title, todos, Delete, flag, UpDateStatus } = props;
   console.log(todos);
   return (
     <div className={styles.box}>
@@ -18,12 +19,14 @@ export const RenderTodoList: FC<RenderTodoListype> = (props) => {
       {todos
         .sort((a: Todo, b: Todo) => Number(a.id) - Number(b.id))
         .map((todo: Todo, index: number) => (
-          <div key={`${index}`}>
+          <div key={`key_${index}`}>
             <RenderTodo
-              todo={todo}
-              flag={flag}
-              Delete={Delete}
-              UpDateStatus={UpDateStatus}
+              {...{
+                todo,
+                Delete,
+                flag,
+                UpDateStatus,
+              }}
             />
           </div>
         ))}
@@ -34,22 +37,28 @@ export const RenderTodoList: FC<RenderTodoListype> = (props) => {
 const RenderTodo: FC<RenderTodoType> = (props) => {
   const { todo, flag, Delete, UpDateStatus } = props;
 
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [hoverFlag, setHoverFlag] = useState<boolean>(false);
   const [leftDisabled, setLeftDisabled] = useState<boolean>(false);
   const [rightDisabled, setRightDisabled] = useState<boolean>(false);
-  const changeStatus = () => {
-    if (disabled) {
-      UpDateStatus(todo.menberId, todo.id, todo.status);
-    }
+
+  const changeStatusLogic = (direction: "left" | "right", status: Status) => {
+    if (direction === "left" && status === "inProgress") return "backlog";
+    if (direction === "right" && status === "inProgress") return "done";
+    return "inProgress";
   };
 
-  const settingDisabled = (left: boolean, right: boolean) => {
+  const changeStatus = (direction: "left" | "right") => {
+    const status = changeStatusLogic(direction, todo.status);
+    UpDateStatus(todo.menberId, todo.id, status);
+  };
+
+  const settingDisabled = (left: boolean, right: boolean): void => {
     setLeftDisabled(left);
     setRightDisabled(right);
   };
 
   useEffect(() => {
-    if (disabled) {
+    if (hoverFlag) {
       switch (todo.status) {
         case "inProgress":
           settingDisabled(true, true);
@@ -64,31 +73,35 @@ const RenderTodo: FC<RenderTodoType> = (props) => {
     } else {
       settingDisabled(false, false);
     }
-  }, [disabled]);
+  }, [hoverFlag]);
 
   return (
     <div
-      className={styles.itemBox}
-      onMouseEnter={() => setDisabled(true)}
-      onMouseLeave={() => setDisabled(false)}
+      onMouseEnter={() => setHoverFlag(true)}
+      onMouseLeave={() => setHoverFlag(false)}
     >
       <div
-        style={{ display: leftDisabled ? "block" : "none" }}
-        onClick={() => changeStatus()}
+        className={leftDisabled ? styles.leftArrowBlock : styles.ArrowNone}
+        onClick={() => changeStatus("left")}
       >
         ＜
       </div>
 
-      <div className={styles.itemName}>{todo.todo}</div>
-      {Delete && flag && (
-        <button onClick={() => Delete(todo.menberId, todo.id)} disabled={!flag}>
-          削除
-        </button>
-      )}
+      <div className={styles.itemBox}>
+        <div className={styles.itemName}>{todo.todo}</div>
+        {Delete && (
+          <button
+            onClick={() => Delete(todo.menberId, todo.id)}
+            disabled={!flag}
+          >
+            削除
+          </button>
+        )}
+      </div>
 
       <div
-        style={{ display: rightDisabled ? "block" : "none" }}
-        onClick={() => changeStatus()}
+        className={rightDisabled ? styles.rightArrowBlock : styles.ArrowNone}
+        onClick={() => changeStatus("right")}
       >
         ＞
       </div>
