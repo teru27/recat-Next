@@ -8,6 +8,10 @@ import {
   Status,
 } from "../../types/types";
 
+import LeftArrowIcon from "src/assets/svg/LeftArrow.svg";
+import RightArrowIcon from "src/assets/svg/RightArrow.svg";
+import DeleteIcon from "src/assets/svg/Delete.svg";
+
 export type RenderTodoListype = ColumnType & UpDateStatusType;
 
 export const RenderTodoList: FC<RenderTodoListype> = (props) => {
@@ -77,6 +81,7 @@ const RenderTodo: FC<RenderTodoType> = (props) => {
 
   return (
     <div
+      className={styles.container}
       onMouseEnter={() => setHoverFlag(true)}
       onMouseLeave={() => setHoverFlag(false)}
     >
@@ -84,18 +89,20 @@ const RenderTodo: FC<RenderTodoType> = (props) => {
         className={leftDisabled ? styles.leftArrowBlock : styles.ArrowNone}
         onClick={() => changeStatus("left")}
       >
-        ＜
+        <LeftArrowIcon />
       </div>
 
       <div className={styles.itemBox}>
         <div className={styles.itemName}>{todo.todo}</div>
         {Delete && (
-          <button
-            onClick={() => Delete(todo.menberId, todo.id)}
-            disabled={!flag}
+          <div
+            onClick={() => flag && Delete(todo.menberId, todo.id)}
+            className={
+              !flag ? styles.noselectDeleteIcon : styles.selectDeleteIcon
+            }
           >
-            削除
-          </button>
+            <DeleteIcon />
+          </div>
         )}
       </div>
 
@@ -103,7 +110,7 @@ const RenderTodo: FC<RenderTodoType> = (props) => {
         className={rightDisabled ? styles.rightArrowBlock : styles.ArrowNone}
         onClick={() => changeStatus("right")}
       >
-        ＞
+        <RightArrowIcon />
       </div>
     </div>
   );

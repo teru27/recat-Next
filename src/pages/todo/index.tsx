@@ -321,9 +321,7 @@ export default function Home() {
         </div>
       </div>
       <button onClick={() => Update("2", "5")}>Update demo</button>
-      <button onClick={() => UpDateStatus("2", "4", "inProgress")}>
-        UpDateStatus demo
-      </button>
+
       <section className={styles.container}>
         {columns.map((column) => {
           const props = {

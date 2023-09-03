@@ -20,6 +20,21 @@ const nextConfig = {
   compiler: {
     removeConsole: isProd,
   },
+
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: [
+        {
+          loader: "@svgr/webpack",
+          options: {
+            svgo: false, // 圧縮無効
+          },
+        },
+      ],
+    });
+    return config;
+  },
 };
 
 module.exports = nextConfig;
