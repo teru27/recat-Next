@@ -10,6 +10,7 @@ export default function Home() {
     { naem: "todo", link: "/todo" },
     { naem: "yomiage", link: "/yomiage" },
     { naem: "dnd-demo", link: "/dnd-demo" },
+    { naem: "modal", link: "/modal" },
   ];
 
   return (

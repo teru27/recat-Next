@@ -1,22 +1,11 @@
 import React, { FC, useEffect, useState } from "react";
 import useSWR from "swr";
 
-import {
-  closestCorners,
-  DndContext,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-  DragOverEvent,
-} from "@dnd-kit/core";
-import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-
-import styles from "./todo.module.scss";
 import { swrGetData } from "../../utli/GASAPI";
 import { ColumnType, Status, Todo } from "../../types/types";
 import { RenderTodoList } from "../../component/todo/RenderTodoList";
+
+import styles from "./todo.module.scss";
 
 export default function Home() {
   const NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY =
