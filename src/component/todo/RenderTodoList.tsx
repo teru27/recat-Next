@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from "react";
-import styles from "./renderTodoList.module.scss";
 import {
   Todo,
   RenderTodoType,
@@ -11,6 +10,8 @@ import {
 import LeftArrowIcon from "src/assets/svg/LeftArrow.svg";
 import RightArrowIcon from "src/assets/svg/RightArrow.svg";
 import DeleteIcon from "src/assets/svg/Delete.svg";
+
+import styles from "./renderTodoList.module.scss";
 
 export type RenderTodoListype = ColumnType & UpDateStatusType;
 

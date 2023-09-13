@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { Todo } from "../types/types";
 
 const NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY =
@@ -77,3 +78,29 @@ export const swrGetData = async (key: [string, number]) => {
 
   return returnStr;
 };
+
+export const tanStackGetData = async (menberId: number): Promise<Todo[]> => {
+  console.log(menberId);
+  const sourceList = {
+    sheetNo: 1,
+    method: "GET",
+    type: "getPrivateData",
+    menberId: menberId,
+  };
+
+  const postparam = {
+    method: "POST",
+    body: JSON.stringify(sourceList),
+  };
+
+  const response = await fetch(
+    `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
+    postparam
+  );
+
+  return response.json();
+};
+
+// export const tanStackGetData = async (menberId: number) => {
+//
+// };
