@@ -11,6 +11,7 @@ export default function Home() {
     { naem: "yomiage", link: "/yomiage" },
     { naem: "dnd-demo", link: "/dnd-demo" },
     { naem: "modal", link: "/modal" },
+    { naem: "tanStackdemo", link: "/tanStackdemo" },
   ];
 
   return (
