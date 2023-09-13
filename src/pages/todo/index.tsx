@@ -40,9 +40,6 @@ export default function Home() {
   // 追加後などのあとにデータの取得フラグ
   const [lodging, setLoding] = useState<boolean>(true);
 
-  // テキストボックで打ち込めれた値
-  const [getInput, setInput] = useState<string>("");
-
   // 削除ボタンの処理中のフラグ
   const [flag, setFlag] = useState<boolean>(true);
 
@@ -59,20 +56,6 @@ export default function Home() {
       )
     );
   };
-
-  useEffect(() => {
-    // tureのときのみ動かす
-    // スプレットシートから全情報を取得
-    // if (loding) {
-    //   fetch(
-    //     `https://sheets.googleapis.com/v4/spreadsheets/${NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID}/values/sheet1?key=${NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY}`
-    //   )
-    //     .then((res) => res.json())
-    //     .then((datas) => {
-    //       setAllProduct(CsvDic(datas.values));
-    //     });
-    // }
-  }, []);
 
   // データの削除
   const Delete = (menberId: string, todoId: string) => {
@@ -174,7 +157,7 @@ export default function Home() {
   };
 
   // データの追加
-  const addData = async (todo: string) => {
+  const addData = async (todo: string, status: string) => {
     setFlag(false);
     // GAS側で data プロパティにアクセスしているため、
     // クライアントから送るデータにも data プロパティが必要。
@@ -185,7 +168,7 @@ export default function Home() {
       data: [
         {
           todo: `${todo}`,
-          status: "backlog",
+          status,
         },
       ],
     };
@@ -213,10 +196,14 @@ export default function Home() {
   };
 
   // スプレットシートに送る
-  const click = () => {
-    if (getInput) {
-      addData(getInput);
-    }
+  const callBack = (
+    getInput: string,
+    status: string,
+    callBack: (e: any) => void
+  ) => {
+    addData(getInput, status);
+
+    callBack("");
   };
 
   // データ取得
@@ -236,7 +223,6 @@ export default function Home() {
       GetDataMutate();
       setLoding(false);
       setFlag(true);
-      setInput("");
     }
   }, [getData, lodging]);
 
@@ -296,20 +282,6 @@ export default function Home() {
   return (
     <div className={styles.main}>
       <h1>Todo List</h1>
-      <div className={styles.inputBox}>
-        <div className={styles.inputs}>
-          <input
-            type="text"
-            onChange={(e) => setInput(e.target.value)}
-            value={getInput}
-            className={styles.inputs}
-          />
-          <button onClick={() => click()} disabled={!flag}>
-            送信
-          </button>
-        </div>
-      </div>
-      <button onClick={() => Update("2", "5")}>Update demo</button>
 
       <section className={styles.container}>
         {columns.map((column) => {
@@ -318,10 +290,10 @@ export default function Home() {
             title: column.title,
             todos: column.todos,
             UpDateStatus: UpDateStatus,
+            callBack,
             flag: column.deleteEvent ? flag : undefined,
             Delete: column.deleteEvent ? Delete : undefined,
           };
-
           return <RenderTodoList {...props} />;
         })}
       </section>

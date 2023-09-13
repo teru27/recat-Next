@@ -18,7 +18,8 @@
   padding: 10px;
   z-index: 1000;
   height: 200px;
-  width: 40vw;
+  width: 30vw;
+
   .close_btn {
     position: absolute;
     right: 0;
@@ -26,11 +27,22 @@
     cursor: pointer;
     text-align: right;
   }
-  :hover {
+  .close_btn:hover {
     opacity: 0.8;
   }
 }
 
 .loading {
   padding: 10vw;
+}
+
+.ModalBtnBody {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 24px;
+}
+.ModalBtnBody:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }

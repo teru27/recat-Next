@@ -1,14 +1,22 @@
 .box {
   margin: 0 auto;
-
+  width: 400px;
+  height: 700px;
+  background-color: rgb(187, 183, 183);
+  border-radius: 40px;
+  .ModalBtn {
+    position: absolute;
+    margin-left: 350px;
+    margin-top: -53px;
+  }
   .container {
     display: flex;
-
+    margin: 0 100px;
     .itemBox {
       display: flex;
       text-align: left;
 
-      width: 200px;
+      width: 250px;
       margin: 10px;
       padding: 10px;
 
@@ -22,15 +30,15 @@
 .leftArrowBlock {
   cursor: pointer;
   position: absolute;
-  margin-top: 20px;
+  margin-top: 16px;
   margin-left: -15px;
 }
 
 .rightArrowBlock {
   cursor: pointer;
   position: absolute;
-  margin-top: 20px;
-  margin-left: 210px;
+  margin-top: 16px;
+  margin-left: 200px;
 }
 .ArrowNone {
   display: none;
@@ -47,4 +55,22 @@
   :hover {
     opacity: 0.8;
   }
+}
+
+.inputBox {
+  display: flex;
+  margin: auto;
+  .inputs {
+    margin: auto;
+    input {
+      margin: 10px;
+    }
+    button {
+      margin: 5px;
+    }
+  }
+}
+
+.error {
+  color: red;
 }

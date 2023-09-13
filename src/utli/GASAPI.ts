@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Todo } from "../types/types";
+import { Status, Todo } from "../types/types";
 
 const NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY =
   process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
@@ -53,6 +53,105 @@ export const getDataRequest = async (menberId: number): Promise<Todo[]> => {
   return returnStr;
 };
 
+// データの削除
+export const Delete = (menberId: string, todoId: string) => {
+  setFlag(false);
+  const sourceList = {
+    sheetNo: 1,
+    method: "GET",
+    type: "deleteData",
+    menberId: menberId,
+    id: todoId,
+  };
+
+  const postparam = {
+    method: "POST",
+    body: JSON.stringify(sourceList),
+  };
+
+  fetch(
+    `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
+    postparam
+  )
+    .then((response) => {
+      console.log(response);
+      return response.json();
+    })
+    .then((data) => {
+      setLoding(true);
+      console.log(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+// データのアップデート
+export const Update = (menberId: string, todoId: string) => {
+  setFlag(false);
+  const sourceList = {
+    sheetNo: 1,
+    method: "GET",
+    type: "UpDate",
+    menberId: menberId,
+    todoId: todoId,
+    todo: "https://sakura-checker.jp/search/B0BP3SHG5Z/",
+  };
+
+  const postparam = {
+    method: "POST",
+    body: JSON.stringify(sourceList),
+  };
+
+  fetch(
+    `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
+    postparam
+  )
+    .then((response) => {
+      console.log(response.ok);
+      return response.json();
+    })
+    .then((data) => {
+      setLoding(true);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+// Statusのアップデート
+export const UpDateStatus = (menberId: string, id: string, status: Status) => {
+  console.log("Click UpDateStatus");
+
+  setFlag(false);
+  const sourceList = {
+    sheetNo: 1,
+    method: "GET",
+    type: "UpDateStatus",
+    menberId,
+    id,
+    status,
+  };
+  const postparam = {
+    method: "POST",
+    body: JSON.stringify(sourceList),
+  };
+  fetch(
+    `https://script.google.com/macros/s/${NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY}/exec`,
+    postparam
+  )
+    .then((response) => {
+      console.log(response.ok);
+      return response.json();
+    })
+    .then((data) => {
+      setLoding(true);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 export const swrGetData = async (key: [string, number]) => {
   const sourceList = {
     sheetNo: 1,
@@ -100,7 +199,3 @@ export const tanStackGetData = async (menberId: number): Promise<Todo[]> => {
 
   return response.json();
 };
-
-// export const tanStackGetData = async (menberId: number) => {
-//
-// };

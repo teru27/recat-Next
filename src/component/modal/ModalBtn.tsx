@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 
+import styles from "./modal.module.scss";
 //　モーダル要素
 type ModalBtnType = {
   children: ReactNode;
@@ -10,7 +11,11 @@ type ModalBtnType = {
 const ModalBtn: FC<ModalBtnType> = ({ children, modalBtnName, modalClick }) => {
   return (
     <>
-      <button name={modalBtnName} onClick={modalClick}>
+      <button
+        className={styles.ModalBtnBody}
+        name={modalBtnName}
+        onClick={modalClick}
+      >
         {children}
       </button>
     </>
