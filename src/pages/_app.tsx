@@ -7,7 +7,6 @@ export default function App({ Component, pageProps }: AppProps) {
     defaultOptions: {
       queries: {
         staleTime: Infinity,
-        refetchInterval: 2000,
       },
     },
   });

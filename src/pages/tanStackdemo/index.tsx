@@ -9,9 +9,15 @@ import useSWR from "swr";
 
 export default function Home() {
   const [todoList, setTodoList] = useState<Todo[]>([]);
-  const { data: getTanStackData } = useQuery(["getTodo"], () =>
-    tanStackGetData(3)
+
+  const [get, set] = useState<number | false>(2000);
+
+  const { data: getTanStackData } = useQuery(
+    ["getTodo"],
+    () => tanStackGetData(3),
+    { refetchInterval: () => get }
   );
+
   useEffect(() => {
     if (getTanStackData) {
       setTodoList(getTanStackData);
@@ -24,6 +30,12 @@ export default function Home() {
       {todoList.map((todo, index) => (
         <div key={`_${index}`}>{todo.todo}</div>
       ))}
+
+      {get === 2000 ? (
+        <button onClick={() => set(false)}>stop fetch API </button>
+      ) : (
+        <button onClick={() => set(2000)}>strat fetch API</button>
+      )}
     </div>
   );
 }

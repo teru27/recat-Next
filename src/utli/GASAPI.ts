@@ -80,14 +80,12 @@ export const swrGetData = async (key: [string, number]) => {
 };
 
 export const tanStackGetData = async (menberId: number): Promise<Todo[]> => {
-  console.log(menberId);
   const sourceList = {
     sheetNo: 1,
     method: "GET",
     type: "getPrivateData",
     menberId: menberId,
   };
-
   const postparam = {
     method: "POST",
     body: JSON.stringify(sourceList),
