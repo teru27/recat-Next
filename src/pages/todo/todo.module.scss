@@ -1,3 +1,7 @@
+.userId {
+  text-align: right;
+}
+
 .main {
   text-align: center;
   .inputBox {
@@ -24,8 +28,6 @@
     top: 0;
     height: 100%;
     width: 100%;
-    background: rgba(32, 32, 32, 0.7);
-    display: flex;
-    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.7);
   }
 }

@@ -49,6 +49,9 @@ export const RenderTodoList: FC<RenderTodoListype> = (props) => {
 
   // モーダルボタンをクリック（イベント）
   const modalClick = (e: any): void => {
+    if (flag) {
+      return;
+    }
     setInput("");
     setError("");
     const { target } = e;

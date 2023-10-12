@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 
 import { swrGetData } from "../../utli/GASAPI";
@@ -36,13 +36,16 @@ export default function Home() {
   const [columns, setColumns] = useState<ColumnType[]>(data);
 
   // menberIdで絞り込んだデータ
-  const [todoList, setTodoList] = useState<Todo[]>([]);
+  const [todoList, setTodoList] = useState<Todo[]>();
 
   // データ更新フラグ lodging: true , not lodging:false
   const [nowLodging, setNowLodging] = useState<boolean>(true);
 
   // APIからdateを受けたった
   const [fetchEndFlag, setFetchEndFlag] = useState<boolean>(true);
+
+  // APIからdateを受けたった
+  const [userId, setUserId] = useState<number>();
 
   // 連想配列に変換
   const CsvDic = (props: any) => {
@@ -222,10 +225,44 @@ export default function Home() {
     }
   }, [getData, fetchEndFlag]);
 
+  useEffect(() => {
+    setNowLodging(true);
+    console.log(todoList);
+    if (todoList) {
+      todoList.forEach((todo: Todo, index: number) => {
+        switch (todo.status) {
+          case "inProgress":
+            data[1].todos.push(todo);
+            break;
+          case "done":
+            data[2].todos.push(todo);
+            break;
+          default:
+            data[0].todos.push(todo);
+            break;
+        }
+      });
+      setColumns(data);
+    }
+  }, [todoList]);
+
+  // 初期読み込み時にloadingの画面を表示するかの処理
+  useEffect(() => {
+    // 登録されていなかった場合、デフォルトでfalse
+    if (todoList && todoList.length === 0) {
+      setNowLodging(false);
+    } else {
+      const columnsFlag = columns.map(
+        (column: ColumnType, index: number) => column.todos.length !== 0
+      );
+      setNowLodging(!columnsFlag.some((flag) => flag));
+    }
+  }, [columns]);
+
   // menberIdの登録仮(今後gasから生成を行い登録するように修正)
   useEffect(() => {
     const menberId = localStorage.getItem("meberId");
-    if (!menberId) {
+    if (!menberId && !userId) {
       const sourceList = {
         sheetNo: 1,
         method: "GET",
@@ -248,57 +285,42 @@ export default function Home() {
         .then((data) => {
           console.log(data);
           localStorage.setItem("meberId", data);
+          setUserId(Number(data));
         })
         .catch((err) => {
           console.log(err);
         });
     }
+    setUserId(Number(menberId));
   }, []);
 
-  useEffect(() => {
-    setNowLodging(true);
-    todoList.forEach((todo: Todo, index: number) => {
-      switch (todo.status) {
-        case "inProgress":
-          data[1].todos.push(todo);
-          break;
-        case "done":
-          data[2].todos.push(todo);
-          break;
-        default:
-          data[0].todos.push(todo);
-          break;
-      }
-    });
-
-    setColumns(data);
-    setNowLodging(false);
-  }, [todoList]);
-
   return (
-    <div className={styles.main}>
-      {nowLodging && (
-        <div className={styles.lodging_overlay}>
-          <Lodging />
-        </div>
-      )}
+    <div>
+      <div className={styles.userId}>id : {userId}</div>
+      <div className={styles.main}>
+        {nowLodging && (
+          <div className={styles.lodging_overlay}>
+            <Lodging />
+          </div>
+        )}
 
-      <h1>Todo List</h1>
+        <h1>Todo List</h1>
 
-      <section className={styles.container}>
-        {columns.map((column) => {
-          const props = {
-            id: column.id,
-            title: column.title,
-            todos: column.todos,
-            UpDateStatus: UpDateStatus,
-            callBack,
-            flag: nowLodging,
-            Delete: column.deleteEvent ? Delete : undefined,
-          };
-          return <RenderTodoList {...props} />;
-        })}
-      </section>
+        <section className={styles.container}>
+          {columns.map((column) => {
+            const props = {
+              id: column.id,
+              title: column.title,
+              todos: column.todos,
+              UpDateStatus: UpDateStatus,
+              callBack,
+              flag: nowLodging,
+              Delete: column.deleteEvent ? Delete : undefined,
+            };
+            return <RenderTodoList {...props} />;
+          })}
+        </section>
+      </div>
     </div>
   );
 }
