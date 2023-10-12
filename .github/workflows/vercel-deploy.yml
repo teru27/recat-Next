@@ -1,4 +1,4 @@
-name: github pages
+name: vercel-deploy
 
 # masterブランチにプッシュしたときjobsに記述した操作を行う
 on:
