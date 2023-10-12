@@ -17,10 +17,7 @@ const Modal: FC<ModalType> = ({ children, modalClick, readComplete }) => {
           <>{children}</>
         ) : (
           <p className={styles.loading}>loading...</p>
-        )}{" "}
-        <div className={styles.close_btn} onClick={modalClick}>
-          閉じる
-        </div>
+        )}
       </div>
 
       <div className={styles.overlay} onClick={modalClick}></div>

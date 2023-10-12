@@ -6,6 +6,7 @@ import { ColumnType, Status, Todo } from "../../types/types";
 import { RenderTodoList } from "../../component/todo/RenderTodoList";
 
 import styles from "./todo.module.scss";
+import { Lodging } from "../../component/lodging/Lodging";
 
 export default function Home() {
   const NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY =
@@ -37,11 +38,11 @@ export default function Home() {
   // menberIdで絞り込んだデータ
   const [todoList, setTodoList] = useState<Todo[]>([]);
 
-  // 追加後などのあとにデータの取得フラグ
-  const [lodging, setLoding] = useState<boolean>(true);
+  // データ更新フラグ lodging: true , not lodging:false
+  const [nowLodging, setNowLodging] = useState<boolean>(true);
 
-  // 削除ボタンの処理中のフラグ
-  const [flag, setFlag] = useState<boolean>(true);
+  // APIからdateを受けたった
+  const [fetchEndFlag, setFetchEndFlag] = useState<boolean>(true);
 
   // 連想配列に変換
   const CsvDic = (props: any) => {
@@ -59,7 +60,7 @@ export default function Home() {
 
   // データの削除
   const Delete = (menberId: string, todoId: string) => {
-    setFlag(false);
+    setNowLodging(true);
     const sourceList = {
       sheetNo: 1,
       method: "GET",
@@ -82,8 +83,8 @@ export default function Home() {
         return response.json();
       })
       .then((data) => {
-        setLoding(true);
         console.log(data);
+        setFetchEndFlag(true);
       })
       .catch((err) => {
         console.log(err);
@@ -92,7 +93,7 @@ export default function Home() {
 
   // データのアップデート
   const Update = (menberId: string, todoId: string) => {
-    setFlag(false);
+    setNowLodging(true);
     const sourceList = {
       sheetNo: 1,
       method: "GET",
@@ -116,7 +117,7 @@ export default function Home() {
         return response.json();
       })
       .then((data) => {
-        setLoding(true);
+        setFetchEndFlag(true);
       })
       .catch((err) => {
         console.log(err);
@@ -126,8 +127,7 @@ export default function Home() {
   // Statusのアップデート
   const UpDateStatus = (menberId: string, id: string, status: Status) => {
     console.log("Click UpDateStatus");
-
-    setFlag(false);
+    setNowLodging(true);
     const sourceList = {
       sheetNo: 1,
       method: "GET",
@@ -149,7 +149,7 @@ export default function Home() {
         return response.json();
       })
       .then((data) => {
-        setLoding(true);
+        setFetchEndFlag(true);
       })
       .catch((err) => {
         console.log(err);
@@ -158,7 +158,7 @@ export default function Home() {
 
   // データの追加
   const addData = async (todo: string, status: string) => {
-    setFlag(false);
+    setNowLodging(true);
     // GAS側で data プロパティにアクセスしているため、
     // クライアントから送るデータにも data プロパティが必要。
     const sourceList = {
@@ -188,7 +188,7 @@ export default function Home() {
       })
       .then((data) => {
         console.log(data.result);
-        setLoding(true);
+        setFetchEndFlag(true);
       })
       .catch((err) => {
         console.log("Error!");
@@ -202,7 +202,6 @@ export default function Home() {
     callBack: (e: any) => void
   ) => {
     addData(getInput, status);
-
     callBack("");
   };
 
@@ -214,17 +213,14 @@ export default function Home() {
   } = useSWR(["GetData", 1], swrGetData);
 
   useEffect(() => {
-    console.log(getData);
     if (getData) {
       setTodoList(getData);
     }
-
-    if (!flag || lodging) {
+    if (fetchEndFlag) {
       GetDataMutate();
-      setLoding(false);
-      setFlag(true);
+      setFetchEndFlag(false);
     }
-  }, [getData, lodging]);
+  }, [getData, fetchEndFlag]);
 
   // menberIdの登録仮(今後gasから生成を行い登録するように修正)
   useEffect(() => {
@@ -260,6 +256,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    setNowLodging(true);
     todoList.forEach((todo: Todo, index: number) => {
       switch (todo.status) {
         case "inProgress":
@@ -275,12 +272,17 @@ export default function Home() {
     });
 
     setColumns(data);
+    setNowLodging(false);
   }, [todoList]);
-
-  console.log(data);
 
   return (
     <div className={styles.main}>
+      {nowLodging && (
+        <div className={styles.lodging_overlay}>
+          <Lodging />
+        </div>
+      )}
+
       <h1>Todo List</h1>
 
       <section className={styles.container}>
@@ -291,7 +293,7 @@ export default function Home() {
             todos: column.todos,
             UpDateStatus: UpDateStatus,
             callBack,
-            flag: column.deleteEvent ? flag : undefined,
+            flag: nowLodging,
             Delete: column.deleteEvent ? Delete : undefined,
           };
           return <RenderTodoList {...props} />;

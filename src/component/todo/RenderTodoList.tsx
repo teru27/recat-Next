@@ -77,27 +77,6 @@ export const RenderTodoList: FC<RenderTodoListype> = (props) => {
 
   return (
     <div className={styles.box}>
-      <h2>{title}</h2>
-      <div className={styles.ModalBtn}>
-        <ModalBtn modalBtnName="modal2" modalClick={modalClick}>
-          +
-        </ModalBtn>
-      </div>
-      {todos
-        .sort((a: Todo, b: Todo) => Number(a.id) - Number(b.id))
-        .map((todo: Todo, index: number) => (
-          <div key={`key_${index}`}>
-            <RenderTodo
-              {...{
-                todo,
-                Delete,
-                flag,
-                UpDateStatus,
-              }}
-            />
-          </div>
-        ))}
-
       <ModalElement
         targetName="modal2"
         modalOpen={modalOpen}
@@ -119,6 +98,26 @@ export const RenderTodoList: FC<RenderTodoListype> = (props) => {
           </div>
         </div>
       </ModalElement>
+      <h2>{title}</h2>
+      <div className={styles.ModalBtn}>
+        <ModalBtn modalBtnName="modal2" modalClick={modalClick}>
+          +
+        </ModalBtn>
+      </div>
+      {todos
+        .sort((a: Todo, b: Todo) => Number(a.id) - Number(b.id))
+        .map((todo: Todo, index: number) => (
+          <div key={`key_${index}`}>
+            <RenderTodo
+              {...{
+                todo,
+                Delete,
+                flag,
+                UpDateStatus,
+              }}
+            />
+          </div>
+        ))}
     </div>
   );
 };
@@ -171,7 +170,9 @@ const RenderTodo: FC<RenderTodoType> = (props) => {
       onMouseLeave={() => setHoverFlag(false)}
     >
       <div
-        className={leftDisabled ? styles.leftArrowBlock : styles.ArrowNone}
+        className={
+          !flag && leftDisabled ? styles.leftArrowBlock : styles.ArrowNone
+        }
         onClick={() => changeStatus("left")}
       >
         <LeftArrowIcon />
@@ -181,9 +182,9 @@ const RenderTodo: FC<RenderTodoType> = (props) => {
         <div className={styles.itemName}>{todo.todo}</div>
         {Delete && (
           <div
-            onClick={() => flag && Delete(todo.menberId, todo.id)}
+            onClick={() => !flag && Delete(todo.menberId, todo.id)}
             className={
-              !flag ? styles.noselectDeleteIcon : styles.selectDeleteIcon
+              flag ? styles.noselectDeleteIcon : styles.selectDeleteIcon
             }
           >
             <DeleteIcon />
@@ -192,7 +193,9 @@ const RenderTodo: FC<RenderTodoType> = (props) => {
       </div>
 
       <div
-        className={rightDisabled ? styles.rightArrowBlock : styles.ArrowNone}
+        className={
+          !flag && rightDisabled ? styles.rightArrowBlock : styles.ArrowNone
+        }
         onClick={() => changeStatus("right")}
       >
         <RightArrowIcon />

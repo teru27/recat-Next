@@ -9,20 +9,23 @@
   width: 100%;
   background: rgba(0, 0, 0, 0.7);
 }
+
 .modal_content {
   position: absolute;
-  top: 50%;
+  top: 10%;
   left: 50%;
-  transform: translateY(-50%) translateX(-50%);
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
   background: #fff;
   padding: 10px;
   z-index: 1000;
   height: 200px;
-  width: 30vw;
-
+  min-width: 600px;
+  border-radius: 10px;
   .close_btn {
     position: absolute;
-    right: 0;
+    right: 5px;
     bottom: 0;
     cursor: pointer;
     text-align: right;
