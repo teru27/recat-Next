@@ -11,6 +11,16 @@ export default function App({ Component, pageProps }: AppProps) {
     },
   });
 
+  const touchHandler = (event: any) => {
+    if (event.touches.length > 1) {
+      event.preventDefault();
+    }
+  };
+
+  document.addEventListener("touchstart", touchHandler, {
+    passive: false,
+  });
+
   return (
     <QueryClientProvider client={queryClient}>
       <Component {...pageProps} />
