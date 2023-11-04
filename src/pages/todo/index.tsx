@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 
-import { swrGetData } from "../../utli/GASAPI";
-import { ColumnType, Status, Todo } from "../../types/types";
-import { RenderTodoList } from "../../component/todo/RenderTodoList";
+import { swrGetData } from "@util/gas-api";
+import { ColumnType, Status, Todo } from "@util/types";
+import { RenderTodoList } from "@component/todo/RenderTodoList";
 
 import styles from "./todo.module.scss";
-import { Lodging } from "../../component/lodging/Lodging";
+import { Lodging } from "@component/lodging/Lodging";
 
 export default function Home() {
   const NEXT_PUBLIC_GOOGLE_SHEETS_POST_KEY =

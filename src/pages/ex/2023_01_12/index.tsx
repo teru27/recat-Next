@@ -2,7 +2,7 @@ import Link from "next/link";
 import {
   dictionaryArraySortNum,
   dimensional2Array,
-} from "../../../utli/generalSrc";
+} from "../../../util/generalSrc";
 
 export default function Home() {
   const test = (str: string, Anser: string): boolean | string => {

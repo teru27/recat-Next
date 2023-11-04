@@ -5,7 +5,7 @@ import {
   ColumnType,
   UpDateStatusType,
   Status,
-} from "../../types/types";
+} from "../../util/types";
 
 import LeftArrowIcon from "src/assets/svg/LeftArrow.svg";
 import RightArrowIcon from "src/assets/svg/RightArrow.svg";

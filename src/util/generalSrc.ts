@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 /**
  * 二次元配列
@@ -261,3 +261,25 @@ export function bogoSort(arr: number[], anserArr: number[]) {
   console.log(count);
   return;
 }
+
+export const useWindowSize = (): number[] => {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    const updateSize = (): void => {
+      setSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener("resize", updateSize);
+    updateSize();
+
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+  return size;
+};
+
+export const delay = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
+export const getRandomNum = (min: number, max: number): number => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};

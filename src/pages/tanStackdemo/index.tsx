@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { tanStackGetData } from "../../utli/GASAPI";
-import { Todo } from "../../types/types";
+import { tanStackGetData } from "../../util/gas-api";
+import { Todo } from "../../util/types";
 
 import styles from "./tanStackdemo.module.scss";
 import { useQuery } from "@tanstack/react-query";

@@ -4,7 +4,7 @@ import {
   decodeBase64GCM2,
   encodeBase64CBC,
   encodeBase64GCM,
-} from "../../utli/aes256";
+} from "../../util/aes256";
 
 export default function Home() {
   {

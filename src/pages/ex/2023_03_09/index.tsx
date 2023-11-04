@@ -3,7 +3,7 @@ import {
   bogoSort,
   intersectionCoordinate,
   sum2Array,
-} from "../../../utli/generalSrc";
+} from "../../../util/generalSrc";
 
 // 移動後のインデックス
 const index = {

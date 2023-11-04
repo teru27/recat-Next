@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Status, Todo } from "../types/types";
+import { Status, Todo } from "./types";
 
 const NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY =
   process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;

@@ -3,7 +3,7 @@ import {
   dimensional2Array,
   linearFunction,
   rotationMatrix,
-} from "../../../utli/generalSrc";
+} from "../../../util/generalSrc";
 
 export default function blockRotate() {
   const test = (str: string, Anser?: string): boolean | string => {

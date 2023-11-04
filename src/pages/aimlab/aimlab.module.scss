@@ -1,0 +1,26 @@
+.box {
+  margin: 0 auto;
+  display: flex;
+  .detailInfo {
+    margin: 30px auto;
+  }
+  .circle {
+    position: relative;
+    border-radius: 50%;
+    background: skyblue; /*背景色*/
+  }
+  .overlay {
+    height: 100%;
+    width: 100%;
+    background: rgba(90, 88, 88, 0.7);
+    .startText {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translateX(-50%);
+      -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      cursor: pointer;
+    }
+  }
+}

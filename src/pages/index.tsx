@@ -1,6 +1,5 @@
 import Link from "next/link";
 import styles from "../pages/index.module.scss";
-import { useEffect } from "react";
 
 export default function Home() {
   const links = [
@@ -11,25 +10,12 @@ export default function Home() {
     { naem: "todo", link: "/todo" },
     { naem: "yomiage", link: "/yomiage" },
     { naem: "dnd-demo", link: "/dnd-demo" },
+    { naem: "demo", link: "/demo" },
+    { naem: "aimlab", link: "/aimlab" },
     { naem: "modal", link: "/modal" },
+    { naem: "react-timer-hook", link: "/react-timer-hook" },
     { naem: "tanStackdemo", link: "/tanStackdemo" },
   ];
-
-  const touchHandler = (event: any) => {
-    if (event.touches.length > 1) {
-      event.preventDefault();
-    }
-  };
-
-  useEffect(() => {
-    useEffect;
-    document.addEventListener("touchstart", touchHandler, {
-      passive: false,
-    });
-    return () => {
-      document.removeEventListener("touchstart", touchHandler);
-    };
-  }, []);
 
   return (
     <div>

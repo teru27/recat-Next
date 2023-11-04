@@ -1,0 +1,13 @@
+.box {
+  margin: 0 auto;
+  display: flex;
+
+  .text {
+    margin: 0 auto;
+  }
+  .circle {
+    position: relative;
+    border-radius: 50%;
+    background: skyblue; /*背景色*/
+  }
+}
