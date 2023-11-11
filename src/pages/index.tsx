@@ -11,6 +11,7 @@ export default function Home() {
     { naem: "yomiage", link: "/yomiage" },
     { naem: "dnd-demo", link: "/dnd-demo" },
     { naem: "demo", link: "/demo" },
+    { naem: "demoClick", link: "/demoClick" },
     { naem: "aimlab", link: "/aimlab" },
     { naem: "modal", link: "/modal" },
     { naem: "react-timer-hook", link: "/react-timer-hook" },

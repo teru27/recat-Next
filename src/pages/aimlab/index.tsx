@@ -156,6 +156,10 @@ export default function App() {
           <div>Window height : {height}</div>
           <div>X座標 : {X_Coordinate}</div>
           <div>Y座標 : {Y_Coordinate}</div>
+          <input
+            type="text"
+            onChange={(e) => setDefaultTime(Number(e.target.value))}
+          />
         </div>
       </div>
     </div>
