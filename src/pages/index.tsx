@@ -16,6 +16,7 @@ export default function Home() {
     { naem: "modal", link: "/modal" },
     { naem: "react-timer-hook", link: "/react-timer-hook" },
     { naem: "tanStackdemo", link: "/tanStackdemo" },
+    { naem: "Gomoku", link: "/Gomoku" },
   ];
 
   return (

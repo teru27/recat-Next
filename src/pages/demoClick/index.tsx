@@ -5,7 +5,7 @@ import { useWindowSize } from "@util/generalSrc";
 const borderLinePixel = 2;
 const boxSize = 600;
 const heightStopwatch = 100;
-const circleSize = 10;
+const circleSize = 100;
 
 type Coordinate = { x: number; y: number };
 
@@ -53,42 +53,47 @@ export default function App() {
       >
         a
       </div>
-      <div
-        className={styles.box}
-        style={{
-          height: `${boxSize + borderLinePixel * 2}px`,
-          width: `${boxSize + borderLinePixel * 2}px`,
-          border: `solid ${borderLinePixel}px #000000`,
-        }}
-      >
+      <div>
         <div
+          className={styles.box}
           style={{
-            height: `${boxSize}px`,
-            width: `${boxSize}px`,
+            height: `${boxSize + borderLinePixel * 2}px`,
+            width: `${boxSize + borderLinePixel * 2}px`,
+            border: `solid ${borderLinePixel}px #000000`,
           }}
-          onClick={(e) => click(e)}
         >
-          {coordinates.map((coordinate, index) => (
-            <div
-              className={styles.circle}
-              style={{
-                width: `${circleSize}px`,
-                height: `${circleSize}px`,
-                top: `${coordinate.y}px`,
-                left: `${coordinate.x}px`,
-              }}
-              key={`key_${index}`}
-            ></div>
-          ))}
+          <div
+            style={{
+              height: `${boxSize}px`,
+              width: `${boxSize}px`,
+            }}
+            onClick={(e) => click(e)}
+          >
+            {coordinates.map((coordinate, index) => (
+              <div
+                className={styles.circle}
+                style={{
+                  width: `${circleSize}px`,
+                  height: `${circleSize}px`,
+                  top: `${coordinate.y - circleSize / 2}px`,
+                  left: `${coordinate.x - circleSize / 2}px`,
+                }}
+                key={`key_${index}`}
+              ></div>
+            ))}
+          </div>
         </div>
       </div>
+
       <div className={styles.box}>
         <div className={styles.text}>
           <div>Window width : {width}</div>
           <div>Window height : {height}</div>
           <div>X座標 : {X_Coordinate}</div>
           <div>Y座標 : {Y_Coordinate}</div>
-          <button onClick={() => setCoordinates([])}>reset</button>
+          {coordinates.length > 0 && (
+            <button onClick={() => setCoordinates([])}>reset</button>
+          )}
         </div>
       </div>
     </div>

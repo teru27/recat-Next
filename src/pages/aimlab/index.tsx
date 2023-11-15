@@ -25,6 +25,8 @@ export default function App() {
   const [clickCount, setClickCount] = useState<number>(0);
   const [hit, setHit] = useState<number>(0);
 
+  const timerList = [10, 20, 30, 40, 50];
+
   const click = (
     event: react.MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) => {
@@ -54,7 +56,10 @@ export default function App() {
   const [time, setTime] = useState<number>(defaultTime);
 
   useEffect(() => {
-    console.log(time);
+    setTime(defaultTime);
+  }, [defaultTime]);
+
+  useEffect(() => {
     if (time === 0) {
       pause();
       return;
@@ -70,13 +75,6 @@ export default function App() {
       reset();
     }
     start();
-  };
-
-  const resetEvent = () => {
-    setTime(defaultTime);
-    setClickCount(0);
-    setHit(0);
-    reset();
   };
 
   //
@@ -156,10 +154,16 @@ export default function App() {
           <div>Window height : {height}</div>
           <div>X座標 : {X_Coordinate}</div>
           <div>Y座標 : {Y_Coordinate}</div>
-          <input
-            type="text"
+          タイマー：
+          <select
+            disabled={isRunning}
             onChange={(e) => setDefaultTime(Number(e.target.value))}
-          />
+            defaultValue={defaultTime}
+          >
+            {timerList.map((timer) => (
+              <option value={timer}>{timer}</option>
+            ))}
+          </select>
         </div>
       </div>
     </div>

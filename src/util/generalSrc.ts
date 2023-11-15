@@ -283,3 +283,37 @@ export const delay = (ms: number) =>
 export const getRandomNum = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+/**
+ * 配列加算
+ * @param index 配列の数
+ * @param minNumber 最小値
+ * @returns
+ */
+export function createSumNumberArray(
+  index: number,
+  minNumber?: number
+): number[] {
+  let board: number[] = new Array();
+
+  const defaultNumber = minNumber ? minNumber - 1 : 0;
+  for (var i = defaultNumber; i < index; i++) {
+    board[i] = i + 1;
+  }
+  return board;
+}
+
+/**
+ * 配列そのまま
+ * @param index 配列の数
+ * @param number 配列に入れる値
+ * @returns
+ */
+export function createNumberArray(index: number, number: number): number[] {
+  let board: number[] = new Array();
+
+  for (var i = 0; i < index; i++) {
+    board[i] = number;
+  }
+  return board;
+}

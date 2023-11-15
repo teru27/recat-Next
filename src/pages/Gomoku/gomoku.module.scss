@@ -1,0 +1,34 @@
+.box {
+  margin: 0 auto;
+  display: flex;
+
+  .text {
+    margin: 0 auto;
+  }
+  .squares {
+    margin: 0 auto;
+  }
+}
+.squaresBox {
+  margin: 100px auto;
+
+  .squares {
+    display: flex;
+    .square {
+      border: 1px solid black;
+      height: 100px;
+      width: 100px;
+      display: flex;
+      margin: 0px auto;
+      .squareText {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+      }
+    }
+    :hover {
+      background-color: gray;
+    }
+  }
+}
