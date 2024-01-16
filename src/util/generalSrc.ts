@@ -26,20 +26,20 @@ export function dimensional2Array(
 /**
  * 二次元配列内の値を足して
  * @param index 正方形の配列のインデック数
- * @param stratNum 一番最初の配列の値
+ * @param startNum 一番最初の配列の値
  * @param sumNumber 増やす値（デフォルト1）
  * @returns
  */
 export function sum2Array(
   index: number,
-  stratNum: number,
+  startNum: number,
   sumNumber?: number
 ): number[][] {
   const numberArr = dimensional2Array(index, true) as number[][];
   let count = 0;
   for (var i = 0; i < numberArr.length; i++) {
     for (var j = 0; j < numberArr[i].length; j++) {
-      numberArr[i][j] = stratNum + count;
+      numberArr[i][j] = startNum + count;
       count = sumNumber ? count + sumNumber : count + 1;
     }
   }
@@ -238,7 +238,7 @@ export function dictionaryArraySortNum(
   );
 }
 
-export function bogoSort(arr: number[], anserArr: number[]) {
+export function bogoSort(arr: number[], answerArr: number[]) {
   let completion = false;
   let count = 0;
 
@@ -252,7 +252,7 @@ export function bogoSort(arr: number[], anserArr: number[]) {
       arr[i] = str;
     }
     console.log(arr);
-    if (JSON.stringify(arr) == JSON.stringify(anserArr)) {
+    if (JSON.stringify(arr) == JSON.stringify(answerArr)) {
       completion = true;
     } else {
       count++;
@@ -317,3 +317,7 @@ export function createNumberArray(index: number, number: number): number[] {
   }
   return board;
 }
+
+// 二次元配列の縦移動
+export const transpose = <T>(a: T[][]): T[][] =>
+  a[0].map((_: T, c: number) => a.map((r: T[]) => r[c]));
