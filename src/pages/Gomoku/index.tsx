@@ -1,11 +1,9 @@
 import react, { useEffect, useState } from "react";
 import styles from "./gomoku.module.scss";
 import {
-  createNumberArray,
   createSumNumberArray,
   dimensional2Array,
   transpose,
-  useWindowSize,
 } from "@util/generalSrc";
 import { GomokuRow } from "@component/Gomoku/GomokuRo";
 

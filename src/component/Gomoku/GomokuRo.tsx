@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { GomokuSquareText } from "./GomokuSquareText";
 
 import styles from "./gomokuRow.module.scss";

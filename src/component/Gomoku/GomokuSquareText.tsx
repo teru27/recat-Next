@@ -1,9 +1,7 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 
 import CircleFilled from "src/assets/svg//CircleFilled.svg";
-import Circle from "src/assets/svg/circle.svg";
-
-import styles from "./gomokuRow.module.scss";
+import Circle from "src/assets/svg/Circle.svg";
 
 type GomokuSquareText = {
   square: number;
