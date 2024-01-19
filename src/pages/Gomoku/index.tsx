@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import react, { useEffect, useState } from "react";
 import styles from "./gomoku.module.scss";
 import {
+  createNumberArray,
   createSumNumberArray,
   dimensional2Array,
   transpose,
+  useWindowSize,
 } from "@util/generalSrc";
+import { GomokuRow } from "@component/Gomoku/GomokuRo";
 
 const defaultTileNumber = 3;
 const defaultCountNum = 3;
@@ -27,9 +30,14 @@ export default function App() {
       return;
     }
 
+    if (gameStets == "start") {
+      setGameStets("now");
+    }
+
     if (squaresList[i][j] != 0) {
       return;
     }
+    // タイルの更新
     squaresList[i][j] = nowPlayer;
     setChangeSquares(squaresList);
   };
@@ -167,7 +175,6 @@ export default function App() {
   };
 
   const changePlayer = () => {
-    // どこにおく？要検討
     const nextPlayer = nowPlayer === 1 ? 2 : 1;
     setNowPlayer(nextPlayer);
   };
@@ -211,13 +218,7 @@ export default function App() {
     <div>
       <div className={styles.box}>
         <div className={styles.text}>
-          {gameStets == "start" && (
-            <div>
-              {`マスをクリックしてスタート`}
-              <br />
-              {`Player${nowPlayer}のターン`}
-            </div>
-          )}
+          {gameStets == "start" && <div>{`Player${nowPlayer}のターン`}</div>}
           {gameStets == "now" && <div>{`Player${nowPlayer}のターン`}</div>}
           {(gameStets == "end" || gameStets == "draw") && (
             <div>
@@ -236,53 +237,45 @@ export default function App() {
           width: `${number * 100}px`,
         }}
       >
-        {squaresList &&
-          squaresList.map((squares, i) => (
-            <div className={styles.squares} key={`key_${i}`}>
-              {squares.map((square, j) => {
-                // component maybe...
-                const a = (): string => {
-                  switch (square) {
-                    case 1:
-                      return "○";
-                    case 2:
-                      return "×";
-                    default:
-                      return "";
-                  }
-                };
-
-                return (
-                  <div
-                    key={`key_${j}`}
-                    className={styles.square}
-                    onClick={() => clickEvent(i, j, square)}
-                  >
-                    {`${i},${j}`}
-                    <div className={styles.squareText}>{a()}</div>
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-      </div>
-      {gameStets == "start" && (
-        <div className={styles.box}>
-          <div className={styles.text}>
-            <select
-              disabled={gameStets != "start"}
-              onChange={(e) => setNumber(Number(e.target.value))}
-              defaultValue={number}
-            >
-              {tileList.map((tile) => (
-                <option value={tile} key={`key_${tile}`}>
-                  {tile}
-                </option>
-              ))}
-            </select>
+        <div className={gameStets != "now" ? styles.overlay : undefined}>
+          <div
+            className={styles.startText}
+            style={{
+              top: `${(number * 20) / 2}%`,
+              left: `${(number * 32) / 2}%`,
+            }}
+          >
+            {gameStets == "start" && <div>Start</div>}
           </div>
+
+          {squaresList &&
+            squaresList.map((squares, i) => (
+              <div className={styles.squares} key={`key_${i}`}>
+                <GomokuRow
+                  indexI={i}
+                  squares={squares}
+                  clickEvent={clickEvent}
+                />
+              </div>
+            ))}
         </div>
-      )}
+      </div>
+
+      <div className={styles.box}>
+        <div className={styles.text}>
+          <select
+            disabled={gameStets != "start"}
+            onChange={(e) => setNumber(Number(e.target.value))}
+            defaultValue={number}
+          >
+            {tileList.map((tile) => (
+              <option value={tile} key={`key_${tile}`}>
+                {tile}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
     </div>
   );
 }

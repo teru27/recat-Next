@@ -14,21 +14,18 @@
 
   .squares {
     display: flex;
-    .square {
-      border: 1px solid black;
-      height: 100px;
-      width: 100px;
-      display: flex;
-      margin: 0px auto;
-      .squareText {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto;
-      }
-    }
     :hover {
       background-color: gray;
+    }
+  }
+  .overlay {
+    height: 100%;
+    width: 100%;
+    background: rgba(90, 88, 88, 0.7);
+    .startText {
+      position: absolute;
+      z-index: 1;
+      cursor: pointer;
     }
   }
 }

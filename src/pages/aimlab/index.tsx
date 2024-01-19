@@ -1,8 +1,10 @@
 import react, { useEffect, useState } from "react";
-import styles from "./aimlab.module.scss";
-import { useWindowSize, delay, getRandomNum } from "@util/generalSrc";
 import { useStopwatch } from "react-timer-hook";
+
+import { useWindowSize, delay, getRandomNum } from "@util/generalSrc";
 import { Stopwatch } from "@component/stopwatch";
+
+import styles from "./aimlab.module.scss";
 
 const borderLinePixel = 2;
 const boxSize = 600;
