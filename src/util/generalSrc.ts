@@ -251,14 +251,12 @@ export function bogoSort(arr: number[], answerArr: number[]) {
       arr[index] = arr[i];
       arr[i] = str;
     }
-    console.log(arr);
     if (JSON.stringify(arr) == JSON.stringify(answerArr)) {
       completion = true;
     } else {
       count++;
     }
   }
-  console.log(count);
   return;
 }
 

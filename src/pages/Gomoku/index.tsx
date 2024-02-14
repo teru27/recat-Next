@@ -7,7 +7,7 @@ import {
 } from "@util/generalSrc";
 import { GomokuRow } from "@component/Gomoku/GomokuRo";
 
-const defaultTileNumber = 3;
+const defaultTileNumber = 4;
 const defaultCountNum = 3;
 
 export default function App() {
@@ -105,8 +105,6 @@ export default function App() {
           } else {
             count2 = 0;
           }
-
-          //console.log(squaresList.length - (squaresList.length - j), i + j);
         }
       });
 
@@ -119,24 +117,38 @@ export default function App() {
 
   // 左上からの右下の判定
   const upRightProcess = (squaresList: number[][]) => {
-    let count = 0;
+    let count1 = 0;
+    let count2 = 0;
 
     return squaresList.map((squares, i) => {
       squares.map((_, j) => {
         if (squaresList.length - i - j - 1 >= 0) {
-          // 完成
-          /*
-          console.log(
-            squaresList.length - (squaresList.length - j),
-            squaresList.length - i - j - 1
-          );
-          */
+          if (count1 == countNum || count2 == countNum) {
+            return;
+          }
+
+          if (
+            squaresList[squaresList.length - (squaresList.length - j)][
+              squaresList.length - i - j - 1
+            ] == nowPlayer
+          ) {
+            count1++;
+          } else {
+            count1 = 0;
+          }
+
+          if (squaresList[j + i][squaresList.length - j - 1] == nowPlayer) {
+            count2++;
+          } else {
+            count2 = 0;
+          }
         }
       });
 
-      if (count == countNum) {
+      if (count1 == countNum || count2 == countNum) {
         return true;
       }
+
       return false;
     });
   };
@@ -202,6 +214,7 @@ export default function App() {
 
   // リセット処理
   useEffect(() => {
+    setGameStets("start");
     setSquaresList(dimensional2Array(number, true) as number[][]);
   }, [number, reStart]);
 
@@ -236,16 +249,6 @@ export default function App() {
         }}
       >
         <div className={gameStets != "now" ? styles.overlay : undefined}>
-          <div
-            className={styles.startText}
-            style={{
-              top: `${(number * 20) / 2}%`,
-              left: `${(number * 32) / 2}%`,
-            }}
-          >
-            {gameStets == "start" && <div>Start</div>}
-          </div>
-
           {squaresList &&
             squaresList.map((squares, i) => (
               <div className={styles.squares} key={`key_${i}`}>
@@ -262,7 +265,7 @@ export default function App() {
       <div className={styles.box}>
         <div className={styles.text}>
           <select
-            disabled={gameStets != "start"}
+            disabled={!(gameStets == "start" || gameStets == "end")}
             onChange={(e) => setNumber(Number(e.target.value))}
             defaultValue={number}
           >

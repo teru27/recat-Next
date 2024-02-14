@@ -18,14 +18,4 @@
       background-color: gray;
     }
   }
-  .overlay {
-    height: 100%;
-    width: 100%;
-    background: rgba(90, 88, 88, 0.7);
-    .startText {
-      position: absolute;
-      z-index: 1;
-      cursor: pointer;
-    }
-  }
 }

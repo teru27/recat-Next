@@ -11,7 +11,6 @@ type GomokuRow = {
 
 export const GomokuRow: FC<GomokuRow> = (props) => {
   const { indexI, squares, clickEvent } = props;
-  console.log(squares);
   return (
     <>
       {squares.map((square, j) => (
