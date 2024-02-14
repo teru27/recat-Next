@@ -1,21 +1,21 @@
 export type Status = "backlog" | "inProgress" | "done";
 
-export type Todo = {
+export interface Todo {
   todo: string;
   id: string;
   menberId: string;
   status: Status;
-};
+}
 
-export type RenderTodoListType = {
+export interface RenderTodoListType {
   todoList: Todo[];
   flag: boolean;
   Delete: (menberId: string, todoId: string) => void;
-};
+}
 
-export type UpDateStatusType = {
+export interface UpDateStatusType {
   UpDateStatus: (menberId: string, id: string, status: Status) => void;
-};
+}
 
 export type RenderTodoType = UpDateStatusType & {
   todo: Todo;
@@ -23,11 +23,11 @@ export type RenderTodoType = UpDateStatusType & {
   Delete?: (menberId: string, todoId: string) => void;
 };
 
-export type ColumnType = {
+export interface ColumnType {
   id: string;
   title: string;
   todos: Todo[];
   deleteEvent?: boolean;
   flag?: boolean;
   Delete?: (menberId: string, todoId: string) => void;
-};
+}
