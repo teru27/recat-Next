@@ -1,0 +1,13 @@
+.main {
+  text-align: center;
+  margin: 0 20vw;
+  width: 70%;
+  .container {
+    display: flex;
+    margin: 0 auto;
+    .cardBox {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+}

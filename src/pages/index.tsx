@@ -17,6 +17,7 @@ export default function Home() {
     { naem: "react-timer-hook", link: "/react-timer-hook" },
     { naem: "tanStackdemo", link: "/tanStackdemo" },
     { naem: "Gomoku", link: "/Gomoku" },
+    { naem: "calcio", link: "/calcio" },
   ];
 
   return (
