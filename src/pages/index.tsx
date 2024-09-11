@@ -18,6 +18,7 @@ export default function Home() {
     { naem: "tanStackdemo", link: "/tanStackdemo" },
     { naem: "Gomoku", link: "/Gomoku" },
     { naem: "calcio", link: "/calcio" },
+    { naem: "dad", link: "/dad" },
   ];
 
   return (
