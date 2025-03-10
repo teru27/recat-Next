@@ -1,0 +1,50 @@
+.container {
+  background-color: rgb(71, 136, 114);
+  .heder {
+    background-color: rgb(27, 65, 52);
+    height: 7vh;
+    width: 100vw;
+  }
+
+  .map {
+    display: flex;
+    .mapInfo {
+      margin: 10px;
+    }
+    .mapInfo:hover {
+      opacity: 0.6;
+    }
+  }
+
+  .main {
+    display: flex;
+
+    .box {
+      margin: 10px;
+      height: 80vh;
+      width: 20vw;
+      border: 1px solid black;
+      background-color: white;
+    }
+    .imageBox {
+      margin: 10px;
+      border: 1px solid black;
+      .image {
+        height: 100%;
+        width: 70vw;
+        background-color: darkgrey;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .image:active {
+        cursor: move;
+      }
+    }
+  }
+
+  .footer {
+    background-color: rgb(27, 65, 52);
+    height: 5vh;
+    width: 100vw;
+  }
+}

@@ -1,8 +1,7 @@
-import Link from "next/link";
-import NamedGoblinCave from "../../assets/img/Named_Goblin_Cave.png";
-import GoblinCave from "../../assets/img/Goblin_Cave.png";
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import styles from "./dad.module.scss";
+import { IconDetail } from "@component/dad/IconDetail";
+
 export interface images {
   url: string;
   caption: string;
@@ -30,6 +29,18 @@ export default function Home() {
   });
   const [imageCenter, setImageCenter] = useState<string>(InitialPosition);
   const [onImage, setOnImage] = useState<boolean>(false);
+
+  // スクロールの制限
+  const stopScrollingBackContent = () => {
+    //document.body.style.overflow = "hidden";
+
+    return () => {
+      //document.body.style.overflow = "auto";
+    };
+  };
+
+  useEffect(stopScrollingBackContent, []);
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       mousePos.x += e.movementX;
@@ -59,43 +70,47 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <h1>dad</h1>
-      <div style={{ display: "flex" }} key={`key_`}>
+    <div className={styles.container}>
+      <div className={styles.heder}>
+        <h1>dad</h1>
+      </div>
+
+      <div className={styles.map} key={`key_`}>
         {fadeImages.map((image, idx) => (
-          <div style={{ margin: "10px" }} key={`key_${idx}`}>
+          <div className={styles.mapInfo} key={`key_${idx}`}>
             {image.caption}
           </div>
         ))}
-        <button onClick={() => setImageCenter(InitialPosition)}>
-          リセット
-        </button>
       </div>
 
-      <div
-        style={{
-          height: `100vh`,
-          width: `100vw`,
-          backgroundImage: `url(${fadeImage.url})`,
-          backgroundRepeat: `no-repeat`,
-          backgroundPosition: imageCenter,
-          backgroundSize: `cover`,
-          position: `relative`,
-          zoom: zoom,
-        }}
-        onMouseDown={(e) => {
-          setOnImage(true);
-        }}
-        onMouseUp={() => {
-          setOnImage(false);
-        }}
-        onWheel={(e) => wheelZoom(e.deltaY)}
-        onMouseMove={(e) => {
-          if (onImage) {
-            setImageCenter(`${mousePos.x}px ${mousePos.y}px`);
-          }
-        }}
-      ></div>
+      <div className={styles.main}>
+        <div className={styles.box}>etc</div>
+        <IconDetail total={10} top={5} under={5} x={0} y={0} />
+        <div className={styles.imageBox}>
+          <div
+            className={styles.image}
+            style={{
+              backgroundImage: `url(${fadeImage.url})`,
+              backgroundPosition: imageCenter,
+              //zoom: zoom,
+            }}
+            onMouseDown={(e) => {
+              setOnImage(true);
+            }}
+            onMouseUp={() => {
+              setOnImage(false);
+            }}
+            onWheel={(e) => wheelZoom(e.deltaY)}
+            onMouseMove={(e) => {
+              if (onImage) {
+                setImageCenter(`${mousePos.x}px ${mousePos.y}px`);
+              }
+            }}
+          ></div>
+        </div>
+      </div>
+
+      <div className={styles.footer}>footer</div>
     </div>
   );
 }
