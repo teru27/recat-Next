@@ -2,6 +2,7 @@ import react, { useCallback, useEffect, useState } from "react";
 import styles from "./demo.module.scss";
 import { useWindowSize } from "@util/generalSrc";
 
+import { Image } from "image-js";
 import Tesseract, { createWorker } from "tesseract.js";
 import { useDropzone } from "react-dropzone";
 
@@ -12,6 +13,23 @@ export default function App() {
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+  };
+
+  const getTextImage = async (base64CapImg: string) => {
+    const image = await Image.load(base64CapImg);
+    if (image) {
+      // 画像が取得できた場合のみ処理を続行する
+      const ocrImg = image
+        .crop({ x: 0, y: 350 }) // 画像の上部100pxを切り取り
+        .flipY() // 上下反転
+        .crop({ x: 1490, y: 600 }) // 画像の右下(反転前の右上)を切り取り
+        .flipY() // 反転を戻す
+        .grey() // グレースケール化
+        //.invert() // 色反転
+        .toBase64("image/png"); // base64形式に変換
+      setBase64Images(`${ocrImg}`);
+      return `data:image/png;base64,${ocrImg}`;
+    }
   };
 
   const onDrop = useCallback((files: File[]) => {
@@ -32,7 +50,13 @@ export default function App() {
       setMsg("読み込み中");
       setImageText("");
       const imageSrc: string = fileReader.result as string;
-      imageToText(imageSrc);
+      // 切り取り
+      getTextImage(imageSrc).then((ocrImg: string | undefined) => {
+        if (ocrImg != undefined) {
+          // 切り取った画像の文字を読み込み
+          imageToText(ocrImg);
+        }
+      });
     };
 
     fileReader.readAsDataURL(file);
@@ -77,6 +101,15 @@ export default function App() {
           )}
         </div>
       </div>
+
+      {base64Images != "" ? (
+        <div>
+          <img src={`data:image/png;base64,${base64Images}`} />
+        </div>
+      ) : (
+        <></>
+      )}
+
       <div>{imageText}</div>
     </div>
   );

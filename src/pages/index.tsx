@@ -19,6 +19,7 @@ export default function Home() {
     { naem: "Gomoku", link: "/Gomoku" },
     { naem: "calcio", link: "/calcio" },
     { naem: "dad", link: "/dad" },
+    { naem: "ocr", link: "/ocr" },
   ];
 
   return (

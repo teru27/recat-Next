@@ -18,6 +18,7 @@
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.8",
     "aes-256-gcm": "^1.0.3",
+    "image-js": "^0.36.0",
     "next": "^13.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
