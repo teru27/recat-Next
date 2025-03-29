@@ -64,3 +64,8 @@ export interface menuDataType {
   type2: string;
   type3: string;
 }
+
+export interface holyRelicStats {
+  stats: number;
+  text: string;
+}

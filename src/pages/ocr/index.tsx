@@ -5,11 +5,75 @@ import { useWindowSize } from "@util/generalSrc";
 import { Image } from "image-js";
 import Tesseract, { createWorker } from "tesseract.js";
 import { useDropzone } from "react-dropzone";
+import { holyRelicStats } from "@util/types";
+
+const stats: holyRelicStats[] = [
+  {
+    stats: 0,
+    text: "防御力％",
+  },
+  {
+    stats: 0,
+    text: "攻撃力％",
+  },
+  {
+    stats: 0,
+    text: "HP％",
+  },
+  {
+    stats: 0,
+    text: "元素チャージ％",
+  },
+  {
+    stats: 0,
+    text: "元素力％",
+  },
+  {
+    stats: 0,
+    text: "会心ダメージ％",
+  },
+  {
+    stats: 0,
+    text: "会心率",
+  },
+];
+
+const holyRelicData = [
+  {
+    text: "防御力",
+    idx: 0,
+  },
+  {
+    text: "攻撃力",
+    idx: 1,
+  },
+  {
+    text: "HP",
+    idx: 2,
+  },
+  {
+    text: "元素チャージ",
+    idx: 3,
+  },
+  {
+    text: "元素力",
+    idx: 4,
+  },
+  {
+    text: "会心ダメージ",
+    idx: 5,
+  },
+  {
+    text: "会心率",
+    idx: 6,
+  },
+];
 
 export default function App() {
   const [base64Images, setBase64Images] = useState<string>("");
   const [imageText, setImageText] = useState<string>("");
   const [msg, setMsg] = useState<string>("");
+  const [getStats, setStats] = useState<holyRelicStats>(stats);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -22,7 +86,7 @@ export default function App() {
       const ocrImg = image
         .crop({ x: 0, y: 350 }) // 画像の上部100pxを切り取り
         .flipY() // 上下反転
-        .crop({ x: 1490, y: 600 }) // 画像の右下(反転前の右上)を切り取り
+        .crop({ x: 1450, y: 600 }) // 画像の右下(反転前の右上)を切り取り
         .flipY() // 反転を戻す
         .grey() // グレースケール化
         //.invert() // 色反転
@@ -73,6 +137,37 @@ export default function App() {
     } = await worker.recognize(base64Image);
     console.log(text);
     await worker.terminate();
+
+    const a: string[] = text.replace(/\s/g, "").split("・");
+
+    a.forEach((str: string, idx: number) => {
+      const text = str.replace(/\s+/g, "");
+      const regex1 = /\d+\.\d+\%|\d+\%/;
+      const regex2 = /\d+\.\d+|\d+/;
+
+      if (regex1.test(text)) {
+        console.log(text.match(regex1));
+        const matchText = text.match(regex1);
+        if (matchText) {
+          holyRelicData.forEach((holyRelic, idx) => {
+            console.log(matchText.input);
+            if (
+              matchText.input &&
+              matchText.input.indexOf(holyRelic.text) !== -1
+            ) {
+              console.log(holyRelic.text);
+              stats[holyRelic.idx].stats = Number(
+                matchText[0].replace("%", "")
+              );
+            }
+          });
+
+          console.log(stats);
+        }
+      } else if (regex2.test(text)) {
+        //console.log(text.match(regex2));
+      }
+    });
     setImageText(text.replace(/\s/g, ""));
   };
 
@@ -109,8 +204,12 @@ export default function App() {
       ) : (
         <></>
       )}
-
-      <div>{imageText}</div>
+      {stats.map((data: holyRelicStats, idx: number) => (
+        <>
+          {data.text} : {data.stats}
+          <br />
+        </>
+      ))}
     </div>
   );
 }
