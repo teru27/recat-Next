@@ -73,7 +73,7 @@ export default function App() {
   const [base64Images, setBase64Images] = useState<string>("");
   const [imageText, setImageText] = useState<string>("");
   const [msg, setMsg] = useState<string>("");
-  const [getStats, setStats] = useState<holyRelicStats>(stats);
+  const [getStats, setStats] = useState<holyRelicStats[]>(stats);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
