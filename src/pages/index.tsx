@@ -20,6 +20,7 @@ export default function Home() {
     { naem: "calcio", link: "/calcio" },
     { naem: "dad", link: "/dad" },
     { naem: "ocr", link: "/ocr" },
+    { naem: "mh_id", link: "/mh_id" },
   ];
 
   return (
